@@ -1,0 +1,65 @@
+/* Add these styles to your existing styles.css file */
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .checkout-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+  }
+  
+  #checkout-form {
+    max-width: 500px;
+    margin: 2rem auto;
+  }
+  
+  #checkout-form div {
+    margin-bottom: 1rem;
+  }
+  
+  #checkout-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  #checkout-form input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  #checkout-form button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  #checkout-form button:hover {
+    background-color: #2980b9;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #2980b9;
+  }

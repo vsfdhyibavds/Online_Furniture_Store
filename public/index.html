@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Online Furniture Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Furniture Store</h1>
+      <div class="nav-links">
+        <a href="home.html" class="active"><i data-lucide="home"></i> Home</a>
+        <a href="cart.html"><i data-lucide="shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+        <a href="order-history.html"><i data-lucide="history"></i> Order History</a>
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="reports.html"><i data-lucide="user-plus"></i> Reports</a>
+        <a href="login.html"><i data-lucide="login"></i>Login</a>
+        <a href="#" id="logout-link"><i data-lucide="log-out"></i> Logout</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filter-section">
+      <label for="category-select">Filter by Category:</label>
+      <select id="category-select">
+        <option value="all">All</option>
+        <option value="living-room">Living Room</option>
+        <option value="dining">Dining Room</option>
+        <option value="bedroom">Bedroom</option>
+        <option value="kitchen">Kitchen</option>
+        <option value="bathroom">Bathroom</option>
+        <option value="outdoor">Outdoor</option>
+        <option value="storage">Storage</option>
+      </select>
+    </section>
+
+    <section id="product-list" class="product-list">
+      <!-- Products will be dynamically added here -->
+      <div class="product-item">
+        <h3>Recliner</h3>
+        <p>$2,000</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/cabinets.jpg" alt="Cabinets">
+        <h3>Cabinets</h3>
+        <p>$1,500</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/dining_table.jpg" alt="Dining Table">
+        <h3>Dining Table</h3>
+        <p>$1,500</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/arm_chair.jpg" alt="Arm Chair">
+        <h3>Arm Chair</h3>
+        <p>$1,000</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/Desk.jpg" alt="Desk">
+        <h3>Desk</h3>
+        <p>$1,000</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/sofa.jpeg" alt="Sofa">
+        <h3>Sofa</h3>
+        <p>$3,000</p>
+        <button>Add to Cart</button>
+      </div>
+      <div class="product-item">
+        <img src="images/Recliner.jpg" alt="Recliner">
+        <h3>Recliner</h3>
+        <p>$2,000</p>
+        <button>Add to Cart</button>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="js/login.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

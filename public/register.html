@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Furniture Store Management</title>
+    <link rel="stylesheet" href="/CSS/styles.css">
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        <form action="register" method="POST" class="register-form" id="registerForm">
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <div class="input-group">
+                <button type="submit" class="btn-register">Register</button>
+            </div>
+        </form>
+        <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+    
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert('Passwords do not match!');
+            }
+        });
+    </script>
+</body>
+</html>

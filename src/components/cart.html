@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Online Furniture Store</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Furniture Store</h1>
+      <div class="nav-links">
+        <a href="index.html"><i data-lucide="home"></i> Home</a>
+        <a href="cart.html" class="active"><i data-lucide="shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+        <a href="login.html"><i data-lucide="user"></i> Login</a>
+        <a href="order-history.html"><i data-lucide="history"></i> Order History</a>
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+    <a href="checkout.html" id="checkout-btn" class="button">Proceed to Checkout</a>
+  </main>
+
+  <script src="cart.js"></script>
+</body>
+</html>

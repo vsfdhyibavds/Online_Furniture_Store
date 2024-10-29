@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Online Furniture Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Furniture Store</h1>
+      <div class="nav-links">
+        <a href="index.html"><i data-lucide="home"></i> Home</a>
+        <a href="cart.html"><i data-lucide="shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+        <a href="login.html"><i data-lucide="user"></i> Login</a>
+        <a href="order-history.html"><i data-lucide="history"></i> Order History</a>
+        <a href="dashboard.html" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="#" id="logout-link"><i data-lucide="log-out"></i> Logout</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Dashboard</h2>
+    <div id="user-info"></div>
+    <div id="recent-orders"></div>
+    <div id="account-settings">
+      <h3>Account Settings</h3>
+      <form id="update-profile-form">
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <button type="submit">Update Profile</button>
+      </form>
+      <form id="change-password-form">
+        <div>
+          <label for="current-password">Current Password:</label>
+          <input type="password" id="current-password" name="current-password" required>
+        </div>
+        <div>
+          <label for="new-password">New Password:</label>
+          <input type="password" id="new-password" name="new-password" required>
+        </div>
+        <div>
+          <label for="confirm-password">Confirm New Password:</label>
+          <input type="password" id="confirm-password" name="confirm-password" required>
+        </div>
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/dashboard.js"></script>
+  <script src="js/logout.js"></script>
+</body>
+</html>

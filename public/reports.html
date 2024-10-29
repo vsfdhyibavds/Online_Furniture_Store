@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - Online Furniture Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Furniture Store</h1>
+      <div class="nav-links">
+        <a href="index.html"><i data-lucide="home"></i> Home</a>
+        <a href="cart.html"><i data-lucide="shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+        <a href="login.html"><i data-lucide="user"></i> Login</a>
+        <a href="order-history.html"><i data-lucide="history"></i> Order History</a>
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="reports.html" class="active"><i data-lucide="file-text"></i> Reports</a> <!-- New Reports Link -->
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Reports</h2>
+    <p>Welcome to the Reports section. Here you can view various reports related to orders, sales, and inventory.</p>
+    
+    <!-- Example of report sections -->
+    <section>
+      <h3>Sales Report</h3>
+      <p>Details about sales over the past month.</p>
+      <button onclick="generateSalesReport()">Generate Sales Report</button>
+      <div id="sales-report"></div>
+    </section>
+
+    <section>
+      <h3>Inventory Report</h3>
+      <p>Details about current inventory levels.</p>
+      <button onclick="generateInventoryReport()">Generate Inventory Report</button>
+      <div id="inventory-report"></div>
+    </section>
+  </main>
+
+  <script src="js/reports.js"></script> <!-- Link to a new JS file for report functionality -->
+</body>
+</html>
