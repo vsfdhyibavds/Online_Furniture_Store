@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logout</title>
+</head>
+<body>
+
+  <a href="#" id="logout-link">Logout</a>
+
+  <script>
+    document.getElementById('logout-link').addEventListener('click', function(event) {
+      event.preventDefault();
+      console.log("Logout link clicked"); // Check if this is logged in the console
+
+      // Replace this with your actual session clearing logic
+      clearUserSession(); 
+
+      console.log("Session cleared"); // Check if this is logged in the console
+      window.location.href = 'login.html';
+    });
+
+    function clearUserSession() {
+      // Implement your session clearing logic here
+      // For example:
+      localStorage.removeItem('userToken');
+      sessionStorage.clear();
+      // Or make an API call to your server to invalidate the session
+    }
+  </script>
+
+</body>
+</html>

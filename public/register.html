@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Furniture Store Management</title>
-    <link rel="stylesheet" href="/CSS/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Online Furniture Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="register-container">
-        <h2>Create an Account</h2>
-        <form action="register" method="POST" class="register-form" id="registerForm">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="input-group">
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-            </div>
-            <div class="input-group">
-                <button type="submit" class="btn-register">Register</button>
-            </div>
-        </form>
-        <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
-    </div>
+  <header>
+    <nav>
+      <h1>Furniture Store</h1>
+        <div class="nav-links">
+          <a href="index.html"><i data-lucide="home"></i> Home</a>
+          <a href="cart.html"><i data-lucide="shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+          <a href="login.html"><i data-lucide="user"></i> Login</a>
+          <a href="order-history.html"><i data-lucide="history"></i> Order History</a>
+          <a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+          <a href="orders.html"><i data-lucide="list"></i> Orders</a>
+          <a href="reports.html"><i data-lucide="file-text"></i> Reports</a>
+          <a href="#" id="logout-link"><i data-lucide="log-out"></i> Logout</a>
+        </div>
+      </nav>
+  </header>
+  <main>
+    <h2>Register</h2>
+    <form id="registration-form">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+      </div>
+      <div>
+        <label for="confirm-password">Confirm Password:</label>
+        <input type="password" id="confirm-password" required>
+      </div>
+      <button type="submit">Register</button>
+    </form>
 
-    <script>
-        const form = document.getElementById('registerForm');
-        form.addEventListener('submit', function(event) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-    
-            if (password !== confirmPassword) {
-                event.preventDefault();
-                alert('Passwords do not match!');
-            }
-        });
-    </script>
+    <p>Already have an account? <a href="login.html">Login here</a></p> <!-- Link to login page -->
+  </main>
+
+  <script src="js/register.js"></script>
 </body>
 </html>

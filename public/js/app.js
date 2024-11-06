@@ -1,91 +1,192 @@
-// Product data
-const products = [
-  { id: 1, name: 'Arm Chair', description: 'Comfortable arm chair', image: 'images/armchair.jpg', category: 'living-room' },
-  { id: 2, name: 'Coffee Table', description: 'Stylish coffee table', image: 'images/coffee-table.jpg', category: 'living-room' },
-  { id: 3, name: 'Desk', description: 'Modern desk', image: 'images/desk.jpg', category: 'bedroom' },
-  { id: 4, name: 'Outdoor Patio Dining Set', description: 'Perfect for outdoor dining', image: 'images/patio-dining.jpg', category: 'outdoor' },
-  { id: 5, name: 'Recliner', description: 'Comfortable recliner', image: 'images/recliner.jpg', category: 'living-room' },
-  { id: 6, name: 'Sofa Chair', description: 'Elegant sofa chair', image: 'images/sofa-chair.jpg', category: 'living-room' },
-  { id: 7, name: 'Sofa Chaise', description: 'Luxurious sofa chaise', image: 'images/sofa-chaise.jpg', category: 'living-room' },
-  { id: 8, name: 'Sofa Lounge', description: 'Comfortable sofa lounge', image: 'images/sofa-lounge.jpg', category: 'living-room' },
-  { id: 9, name: 'Sofa', description: 'Classic sofa', image: 'images/sofa.jpg', category: 'living-room' },
-  { id: 10, name: 'Dining Table', description: 'Elegant dining table', image: 'images/dining-table.jpg', category: 'dining' },
-  { id: 11, name: 'Cabinets', description: 'Spacious cabinets', image: 'images/cabinets.jpg', category: 'storage' },
-];
+import { Navigation } from './components/Navigation.js';
+import { CategoryFilter } from './components/CategoryFilter.js';
+import { ProductList } from './components/ProductList.js';
 
-// Cart count
+class App {
+  constructor() {
+    this.navigation = new Navigation();
+    this.categoryFilter = new CategoryFilter();
+    this.productList = new ProductList();
+    this.init();
+  }
+
+  async init() {
+    await this.renderApp();
+    this.setupEventListeners();
+    this.initializeLucide();
+    this.setupIntersectionObserver();
+  }
+
+  async renderApp() {
+    // Render components asynchronously
+    const [navHTML, filterHTML, productsHTML] = await Promise.all([
+      this.navigation.render(),
+      this.categoryFilter.render(),
+      this.productList.render()
+    ]);
+
+    document.querySelector('header').innerHTML = navHTML;
+    document.querySelector('main').innerHTML = `
+      ${filterHTML}
+      ${productsHTML}
+    `;
+  }
+
+  setupIntersectionObserver() {
+    const options = {
+      root: null,
+      rootMargin: '50px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          observer.unobserve(img);
+        }
+      });
+    }, options);
+
+    // Observe all product images
+    document.querySelectorAll('.product-item img').forEach(img => {
+      if (img.dataset.src) {
+        observer.observe(img);
+      }
+    });
+  }
+
+  setupEventListeners() {
+    // Use event delegation for better performance
+    document.addEventListener('change', (e) => {
+      if (e.target.id === 'category-select') {
+        this.filterProducts(e.target.value);
+      }
+    });
+
+    document.addEventListener('onclick', (e) => {
+      if (e.target.matches('.product-item button')) {
+        this.addToCart(e.target.dataset.productId);
+      }
+    });
+  }
+
+  filterProducts(category) {
+    requestAnimationFrame(() => {
+      const products = document.querySelectorAll('.product-item');
+      products.forEach(product => {
+        const display = category === 'all' || product.dataset.category === category ? 'block' : 'none';
+        product.style.display = display;
+      });
+    });
+  }
+
+  addToCart(productId) {
+    const cartCount = document.getElementById('cart-count');
+    cartCount.textContent = parseInt(cartCount.textContent) + 1;
+  }
+
+  initializeLucide() {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+}
+
+// Initialize app when DOM is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new App());
+} else {
+  new App();
+}
+// Cart functionality
+// Initialize cart count
 let cartCount = 0;
 
-// Initialize the application
-function init() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user) {
-      window.location.href = 'index.html';
-      return;
-  }
+// Function to handle adding items to the cart
+function addToCart(event) {
+    const button = event.target;
+    const productName = button.getAttribute('data-name');
+    const productPrice = button.getAttribute('data-price');
 
-  renderProducts(products);
-  setupEventListeners();
-  lucide.createIcons();
+    // Here you can add code to store the product in the cart (e.g., in local storage or an array)
+    console.log(`Added to cart: ${productName} - $${productPrice}`);
+
+    // Update the cart count
+    cartCount++;
+    document.getElementById('cart-count').innerText = cartCount;
 }
 
-// Render products to the DOM
-function renderProducts(productsToRender) {
-  const productList = document.getElementById('product-list');
-  productList.innerHTML = '';
+// Attach event listeners to all "Add to Cart" buttons
+const addToCartButtons = document.querySelectorAll('button[data-name]');
+addToCartButtons.forEach(button => {
+    button.addEventListener('onclick', addToCart);
+});
+// Add event listeners to all "Add to Cart" buttons
+document.querySelectorAll('.product-item button').forEach(button => {
+  button.addEventListener('onclick', function(e) {
+    const productItem = e.target.closest('.product-item');
+    const product = {
+      name: productItem.querySelector('h3').textContent,
+      price: parseFloat(productItem.querySelector('p').textContent.replace('$', '')),
+      image: productItem.querySelector('img').src,
+      quantity: 1
+    };
 
-  productsToRender.forEach(product => {
-      const productCard = createProductCard(product);
-      productList.appendChild(productCard);
+    // Check if product already exists in cart
+    const existingProductIndex = cart.findIndex(item => item.name === product.name);
+    
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push(product);
+    }
+
+    // Save cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Update cart count
+    updateCartCount();
+    
+    // Show feedback to user
+    showNotification('Item added to cart!');
   });
+});
+
+// Update cart count in the header
+function updateCartCount() {
+  const cartCount = document.getElementById('cart-count');
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  cartCount.textContent = totalItems;
 }
 
-// Create a product card element
-function createProductCard(product) {
-  const productCard = document.createElement('div');
-  productCard.className = 'product-card';
-  productCard.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <div class="product-info">
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
-          <button class="add-to-cart-button" data-product-id="${product.id}">Add to Cart</button>
-      </div>
-  `;
-  return productCard;
+// Show notification
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+
+  // Remove notification after 2 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 2000);
 }
 
-// Setup event listeners
-function setupEventListeners() {
-  document.getElementById('product-list').addEventListener('click', handleAddToCart);
-  document.getElementById('category-select').addEventListener('change', filterProducts);
-}
-
-// Handle add to cart functionality
-function handleAddToCart(event) {
-  if (event.target.matches('.add-to-cart-button')) {
-      addToCart(event.target.dataset.productId);
-  }
-}
-
-// Add product to the cart
-function addToCart(productId) {
-  const product = products.find(product => product.id === parseInt(productId));
-  if (product) {
-      cartCount++;
-      document.getElementById('cart-count').textContent = cartCount;
-      // Optionally, you can add logic to store cart items in local storage or a cart object
-  }
-}
-
-// Filter products based on category
-function filterProducts() {
-  const selectedCategory = document.getElementById('category-select').value;
-  const filteredProducts = selectedCategory === 'all'
-      ? products
-      : products.filter(product => product.category === selectedCategory);
-  renderProducts(filteredProducts);
-}
-
-// Initialize the app on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', init);
+// Category filter functionality
+document.getElementById('category-select').addEventListener('change', function(e) {
+  const category = e.target.value;
+  const products = document.querySelectorAll('.product-item');
+  
+  products.forEach(product => {
+    if (category === 'all' || product.dataset.category === category) {
+      product.style.display = 'block';
+    } else {
+      product.style.display = 'none';
+    }
+  });
+});

@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout - Online Furniture Store</title>
+  <title>Order - Online Furniture Store</title>
   <link rel="stylesheet" href="css/styles.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <header>
@@ -25,43 +24,35 @@
   </header>
 
   <main>
-    <h2>Checkout</h2>
-    <div id="checkout-summary"></div>
-    <form id="checkout-form">
-      <h3>Shipping Information</h3>
+    <h2>Place Your Order</h2>
+    <form id="order-form">
       <div>
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" required>
+        <label for="product">Select Product:</label>
+        <select id="product" required>
+          <option value="">--Select a product--</option>
+          <option value="chair">Chair</option>
+          <option value="table">Table</option>
+          <option value="sofa">Sofa</option>
+          <option value="armchair">Armchair</option> 
+          <option value="coffee-table">Coffee Table</option>
+          <option value="dining-table">Dining Table</option>
+          <option value="bookcase">Bookcase</option>
+        </select>
       </div>
       <div>
-        <label for="address">Address:</label>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" min="1" required>
+      </div>
+      <div>
+        <label for="address">Shipping Address:</label>
         <input type="text" id="address" required>
-      </div>
-      <div>
-        <label for="city">City:</label>
-        <input type="text" id="city" required>
-      </div>
-      <div>
-        <label for="zip">ZIP Code:</label>
-        <input type="text" id="zip" required>
-      </div>
-      <h3>Payment Information</h3>
-      <div>
-        <label for="card-number">Card Number:</label>
-        <input type="text" id="card-number" required>
-      </div>
-      <div>
-        <label for="expiry">Expiry Date:</label>
-        <input type="text" id="expiry" placeholder="MM/YY" required>
-      </div>
-      <div>
-        <label for="cvv">CVV:</label>
-        <input type="text" id="cvv" required>
       </div>
       <button type="submit">Place Order</button>
     </form>
+
+    <p id="order-message"></p>
   </main>
 
-  <script src="js/checkout.js"></script>
+  <script src="js/order.js"></script>
 </body>
 </html>
