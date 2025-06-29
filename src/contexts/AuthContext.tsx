@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useAuthStore } from '../stores/useAuthStore';
+import { apiClient } from '../lib/api';
 import { User } from '../types';
 
 interface AuthContextType {
@@ -9,6 +10,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
+  updateProfile: (updates: Partial<User>) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 interface RegisterData {
@@ -21,81 +24,99 @@ interface RegisterData {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { user, isAuthenticated, isLoading, login: storeLogin, logout: storeLogout, setLoading } = useAuthStore();
+  const { 
+    user, 
+    isAuthenticated, 
+    isLoading, 
+    login: storeLogin, 
+    logout: storeLogout, 
+    updateUser,
+    setLoading 
+  } = useAuthStore();
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await apiClient.login(email, password);
       
-      // Mock user data
-      const mockUser: User = {
-        id: '1',
-        email,
-        firstName: 'John',
-        lastName: 'Doe',
-        role: email.includes('admin') ? 'admin' : 'customer',
-        addresses: [],
-        preferences: {
-          newsletter: true,
-          notifications: true,
-          currency: 'USD',
-          language: 'en',
-        },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-
-      const mockToken = 'mock-jwt-token';
-      storeLogin(mockUser, mockToken);
+      if (response.success) {
+        storeLogin(response.data.user, response.data.token);
+      } else {
+        throw new Error('Login failed');
+      }
     } catch (error) {
       setLoading(false);
-      throw new Error('Login failed');
+      throw error;
     }
   };
 
   const register = async (userData: RegisterData) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await apiClient.register(userData);
       
-      const mockUser: User = {
-        id: Date.now().toString(),
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        role: 'customer',
-        addresses: [],
-        preferences: {
-          newsletter: true,
-          notifications: true,
-          currency: 'USD',
-          language: 'en',
-        },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-
-      const mockToken = 'mock-jwt-token';
-      storeLogin(mockUser, mockToken);
+      if (response.success) {
+        storeLogin(response.data.user, response.data.token);
+      } else {
+        throw new Error('Registration failed');
+      }
     } catch (error) {
       setLoading(false);
-      throw new Error('Registration failed');
+      throw error;
     }
   };
 
   const logout = () => {
+    apiClient.logout();
     storeLogout();
+  };
+
+  const updateProfile = async (updates: Partial<User>) => {
+    try {
+      const response = await apiClient.updateProfile(updates);
+      
+      if (response.success) {
+        updateUser(response.data);
+      } else {
+        throw new Error('Profile update failed');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    try {
+      const response = await apiClient.changePassword(currentPassword, newPassword);
+      
+      if (!response.success) {
+        throw new Error('Password change failed');
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
     // Check if user is still authenticated on app load
-    if (isAuthenticated && user) {
-      // Validate token with backend
-      // For now, we'll just assume it's valid
-    }
+    const checkAuth = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const response = await apiClient.getCurrentUser();
+          if (response.success) {
+            updateUser(response.data);
+          } else {
+            logout();
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          logout();
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   return (
@@ -107,6 +128,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
+        updateProfile,
+        changePassword,
       }}
     >
       {children}
