@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 // Configure email transporter
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   // For development, use a service like Ethereal Email or configure with your email provider
   host: process.env.SMTP_HOST || 'smtp.ethereal.email',
   port: process.env.SMTP_PORT || 587,
