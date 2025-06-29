@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Search, Menu, Heart } from 'lucide-react';
+import { ShoppingCart, User, Search, Menu, Heart, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useCartStore } from '../../stores/useCartStore';
@@ -11,14 +11,37 @@ export function Header() {
   const { getTotalItems, toggleCart } = useCartStore();
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const totalItems = getTotalItems();
 
   const handleAuthAction = () => {
     if (isAuthenticated) {
       logout();
+      navigate('/');
     } else {
       navigate('/auth');
     }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
+  const handleWishlistClick = () => {
+    if (isAuthenticated) {
+      navigate('/wishlist');
+    } else {
+      navigate('/auth');
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -35,21 +58,28 @@ export function Header() {
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
+            <form onSubmit={handleSearch} className="relative w-full">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Search furniture..."
                 className="pl-10 pr-4"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
+            </form>
           </div>
 
           {/* Navigation */}
           <nav className="flex items-center space-x-4">
-            {/* Mobile Menu */}
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
+            {/* Mobile Menu Button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="md:hidden"
+              onClick={toggleMobileMenu}
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
 
             {/* Desktop Navigation */}
@@ -68,11 +98,9 @@ export function Header() {
             {/* User Actions */}
             <div className="flex items-center space-x-2">
               {/* Wishlist */}
-              {isAuthenticated && (
-                <Button variant="ghost" size="icon">
-                  <Heart className="h-5 w-5" />
-                </Button>
-              )}
+              <Button variant="ghost" size="icon" onClick={handleWishlistClick}>
+                <Heart className="h-5 w-5" />
+              </Button>
 
               {/* Cart */}
               <Button variant="ghost" size="icon" onClick={toggleCart} className="relative">
@@ -111,6 +139,50 @@ export function Header() {
             </div>
           </nav>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t py-4">
+            <div className="space-y-4">
+              {/* Mobile Search */}
+              <form onSubmit={handleSearch} className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  type="search"
+                  placeholder="Search furniture..."
+                  className="pl-10 pr-4"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </form>
+
+              {/* Mobile Navigation Links */}
+              <div className="flex flex-col space-y-2">
+                <Link 
+                  to="/" 
+                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link 
+                  to="/categories" 
+                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Categories
+                </Link>
+                <Link 
+                  to="/deals" 
+                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Deals
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

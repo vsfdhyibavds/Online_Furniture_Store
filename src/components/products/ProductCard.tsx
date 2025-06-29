@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
@@ -8,6 +8,9 @@ import { Product } from '../../types';
 import { formatPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
 import { useToast } from '../../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '../../lib/api';
 
 interface ProductCardProps {
   product: Product;
@@ -16,6 +19,47 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCartStore();
   const { toast } = useToast();
+  const { isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
+  const addToWishlistMutation = useMutation({
+    mutationFn: (productId: string) => apiClient.addToWishlist(productId),
+    onSuccess: () => {
+      setIsInWishlist(true);
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+      toast({
+        title: "Added to wishlist",
+        description: `${product.name} has been added to your wishlist.`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to add to wishlist.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const removeFromWishlistMutation = useMutation({
+    mutationFn: (productId: string) => apiClient.removeFromWishlist(productId),
+    onSuccess: () => {
+      setIsInWishlist(false);
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+      toast({
+        title: "Removed from wishlist",
+        description: `${product.name} has been removed from your wishlist.`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to remove from wishlist.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,6 +69,26 @@ export function ProductCard({ product }: ProductCardProps) {
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to add items to your wishlist.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isInWishlist) {
+      removeFromWishlistMutation.mutate(product.id);
+    } else {
+      addToWishlistMutation.mutate(product.id);
+    }
   };
 
   const discountPercentage = product.originalPrice 
@@ -48,13 +112,13 @@ export function ProductCard({ product }: ProductCardProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-3 right-3 bg-white/80 hover:bg-white"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            className={`absolute top-3 right-3 bg-white/80 hover:bg-white ${
+              isInWishlist ? 'text-red-500' : ''
+            }`}
+            onClick={handleWishlistToggle}
+            disabled={addToWishlistMutation.isPending || removeFromWishlistMutation.isPending}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-current' : ''}`} />
           </Button>
         </div>
         
