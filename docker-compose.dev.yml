@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  furniture-store-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DATABASE_URL=/app/server/database/furniture_store.db
+      - JWT_SECRET=dev-secret-key
+      - FRONTEND_URL=http://localhost:5173
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - furniture_dev_uploads:/app/server/uploads
+      - furniture_dev_db:/app/server/database
+    networks:
+      - furniture-dev-network
+    command: npm run dev
+
+  postgres-dev:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=furniture_store_dev
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_pass
+    volumes:
+      - furniture_dev_postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - furniture-dev-network
+
+volumes:
+  furniture_dev_uploads:
+  furniture_dev_db:
+  furniture_dev_postgres:
+
+networks:
+  furniture-dev-network:
+    driver: bridge

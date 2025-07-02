@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: furniture-store-service
+  namespace: furniture-store
+spec:
+  selector:
+    app: furniture-store
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3001
+  type: ClusterIP

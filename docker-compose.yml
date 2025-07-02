@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # Main Application
+  furniture-store:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=/app/server/database/furniture_store.db
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key}
+      - SMTP_HOST=${SMTP_HOST:-smtp.ethereal.email}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - FROM_EMAIL=${FROM_EMAIL:-noreply@furnstore.com}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3001}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - MAX_FILE_SIZE=5242880
+      - BCRYPT_ROUNDS=12
+      - ALLOWED_ORIGINS=http://localhost:3001,https://your-domain.com
+    volumes:
+      - furniture_uploads:/app/server/uploads
+      - furniture_db:/app/server/database
+    networks:
+      - furniture-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - furniture_uploads:/var/www/uploads:ro
+    depends_on:
+      - furniture-store
+    networks:
+      - furniture-network
+    restart: unless-stopped
+
+  # Redis for Session Storage (Optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - furniture_redis:/data
+    networks:
+      - furniture-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # PostgreSQL Database (Alternative to SQLite for production)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=furniture_store
+      - POSTGRES_USER=${POSTGRES_USER:-furniture_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-furniture_pass}
+    volumes:
+      - furniture_postgres:/var/lib/postgresql/data
+      - ./server/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - furniture-network
+    restart: unless-stopped
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - furniture_prometheus:/prometheus
+    networks:
+      - furniture-network
+    restart: unless-stopped
+
+  # Grafana for Visualization
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - furniture_grafana:/var/lib/grafana
+    networks:
+      - furniture-network
+    restart: unless-stopped
+
+volumes:
+  furniture_uploads:
+  furniture_db:
+  furniture_redis:
+  furniture_postgres:
+  furniture_prometheus:
+  furniture_grafana:
+
+networks:
+  furniture-network:
+    driver: bridge

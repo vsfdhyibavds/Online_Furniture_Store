@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: furniture-store-config
+  namespace: furniture-store
+data:
+  NODE_ENV: "production"
+  PORT: "3001"
+  DATABASE_URL: "/app/server/database/furniture_store.db"
+  FROM_EMAIL: "noreply@furnstore.com"
+  FRONTEND_URL: "https://your-domain.com"
+  MAX_FILE_SIZE: "5242880"
+  BCRYPT_ROUNDS: "12"
+  ALLOWED_ORIGINS: "https://your-domain.com"

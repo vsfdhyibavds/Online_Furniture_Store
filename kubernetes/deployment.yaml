@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: furniture-store
+  namespace: furniture-store
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: furniture-store
+  template:
+    metadata:
+      labels:
+        app: furniture-store
+    spec:
+      containers:
+      - name: furniture-store
+        image: furniture-store:latest
+        ports:
+        - containerPort: 3001
+        envFrom:
+        - configMapRef:
+            name: furniture-store-config
+        - secretRef:
+            name: furniture-store-secrets
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/server/uploads
+        - name: database
+          mountPath: /app/server/database
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: furniture-store-uploads-pvc
+      - name: database
+        persistentVolumeClaim:
+          claimName: furniture-store-db-pvc
