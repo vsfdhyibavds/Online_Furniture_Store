@@ -9,6 +9,9 @@ WORKDIR /app
 COPY package*.json ./
 COPY server/package*.json ./server/
 
+# Force compilation from source for native modules
+ENV npm_config_build_from_source=true
+
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
