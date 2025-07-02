@@ -247,7 +247,8 @@ async function insertInitialData() {
     ['2', 'Bedroom', 'bedroom', 'Create your perfect sleep sanctuary', 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=800'],
     ['3', 'Dining Room', 'dining-room', 'Elegant dining furniture for memorable meals', 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800'],
     ['4', 'Office', 'office', 'Productive and comfortable workspace furniture', 'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=800'],
-    ['5', 'Storage', 'storage', 'Organize your space with stylish storage solutions', 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800']
+    ['5', 'Storage', 'storage', 'Organize your space with stylish storage solutions', 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800'],
+    ['6', 'Outdoor', 'outdoor', 'Weather-resistant furniture for your outdoor spaces', 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=800']
   ];
 
   categories.forEach(category => {
@@ -261,12 +262,33 @@ async function insertInitialData() {
   `);
 
   const products = [
-    ['1', 'Modern Sectional Sofa', 'A luxurious and comfortable sectional sofa perfect for modern living rooms. Features premium fabric upholstery and sturdy construction.', 2499, 2999, '1', 'ModernLiving', 1, 15, 4.8, 124, 120, 85, 90, 85, 1],
-    ['2', 'Elegant Dining Table Set', 'Beautiful solid wood dining table with 6 matching chairs. Perfect for family dinners and entertaining guests.', 1899, null, '3', 'ClassicWood', 1, 8, 4.6, 89, 180, 75, 90, 120, 1],
-    ['3', 'Luxury King Size Bed', 'Premium upholstered king size bed with tufted headboard. Combines comfort and elegance for the perfect bedroom centerpiece.', 1599, null, '2', 'DreamComfort', 1, 12, 4.9, 156, 193, 120, 203, 95, 1],
-    ['4', 'Executive Office Chair', 'Ergonomic executive office chair with premium leather upholstery and adjustable features for maximum comfort during long work sessions.', 899, null, '4', 'ErgoWork', 1, 25, 4.7, 203, 70, 120, 70, 28, 0],
-    ['5', 'Modern Coffee Table', 'Sleek glass-top coffee table with metal legs. Perfect addition to contemporary living rooms.', 599, null, '1', 'ModernLiving', 1, 20, 4.4, 67, 120, 45, 60, 35, 0],
-    ['6', 'Vintage Armchair', 'Classic vintage-style armchair with rich leather upholstery and brass studs. A timeless piece for any room.', 1299, null, '1', 'VintageClassics', 1, 10, 4.8, 92, 85, 95, 90, 45, 0]
+    // Living Room
+    ['1', 'Luxe Velvet Sectional Sofa', 'Experience ultimate comfort with this premium velvet sectional sofa. Features deep seating, plush cushions, and a sophisticated design that anchors any living room.', 2899, 3499, '1', 'Luxe Living', 1, 12, 4.8, 156, 280, 85, 160, 95, 1],
+    ['2', 'Mid-Century Modern Coffee Table', 'A stunning walnut coffee table that embodies mid-century modern design. Features clean lines, tapered legs, and a rich walnut finish.', 649, 799, '1', 'Century Design', 1, 28, 4.6, 89, 120, 45, 60, 25, 1],
+    ['3', 'Scandinavian Accent Chair', 'Embrace Nordic design with this elegant accent chair. Features a curved backrest, natural oak legs, and premium fabric upholstery.', 449, null, '1', 'Nordic Home', 1, 35, 4.7, 124, 65, 85, 70, 18, 0],
+    ['4', 'Industrial TV Console', 'A robust TV console that combines industrial aesthetics with modern functionality. Features metal framework and reclaimed wood shelving.', 899, null, '1', 'Urban Steel', 1, 18, 4.5, 67, 180, 55, 40, 45, 0],
+    
+    // Bedroom
+    ['5', 'Upholstered Platform Bed', 'A sophisticated platform bed with luxurious upholstered headboard. Features button tufting, premium linen fabric, and a low-profile design.', 1299, 1599, '2', 'Sleep Haven', 1, 15, 4.9, 203, 193, 120, 203, 85, 1],
+    ['6', 'Modern Nightstand Set', 'Sleek nightstands with clean lines and practical storage. Features soft-close drawers, wireless charging pad, and integrated LED lighting.', 599, null, '2', 'Tech Furniture Co', 1, 22, 4.4, 78, 50, 60, 40, 15, 0],
+    ['7', 'Vintage Wooden Dresser', 'A beautifully crafted dresser with vintage charm. Features six spacious drawers with dovetail joints and antique brass hardware.', 1199, null, '2', 'Heritage Furniture', 1, 8, 4.8, 92, 150, 85, 45, 65, 0],
+    
+    // Dining Room
+    ['8', 'Farmhouse Dining Table Set', 'A stunning farmhouse dining table that seats 8 comfortably. Crafted from reclaimed oak with weathered finish and trestle base.', 2199, 2699, '3', 'Rustic Charm', 1, 6, 4.7, 134, 240, 75, 100, 120, 1],
+    ['9', 'Modern Glass Dining Table', 'An elegant glass dining table with sculptural metal base. The tempered glass top provides sophistication while the unique base adds artistic flair.', 1599, null, '3', 'Contemporary Design', 1, 10, 4.3, 56, 180, 75, 90, 75, 0],
+    ['10', 'Leather Dining Chairs (Set of 4)', 'Premium leather dining chairs with ergonomic design. Features genuine top-grain leather, solid oak legs, and high-density foam cushioning.', 899, null, '3', 'Leather Craft', 1, 16, 4.6, 89, 45, 85, 50, 12, 0],
+    
+    // Office
+    ['11', 'Executive Leather Office Chair', 'A premium executive chair designed for long work sessions. Features genuine leather upholstery, lumbar support, and adjustable height.', 1299, null, '4', 'Executive Comfort', 1, 25, 4.8, 167, 70, 120, 70, 32, 0],
+    ['12', 'Standing Desk Converter', 'Transform any desk into a standing workstation. Features dual monitor support, keyboard tray, and smooth height adjustment.', 399, null, '4', 'ErgoWork', 1, 42, 4.4, 203, 80, 50, 60, 18, 0],
+    
+    // Storage
+    ['13', 'Modular Bookshelf System', 'A versatile modular bookshelf system that grows with your needs. Features solid wood construction and adjustable shelves.', 799, null, '5', 'Modular Living', 1, 20, 4.5, 98, 120, 180, 30, 55, 0],
+    ['14', 'Storage Ottoman Bench', 'A multifunctional storage ottoman that serves as seating, footrest, and storage. Features premium fabric upholstery and hidden compartment.', 299, null, '5', 'Multi-Function', 1, 35, 4.3, 76, 100, 45, 40, 15, 0],
+    
+    // Outdoor
+    ['15', 'Teak Outdoor Dining Set', 'A premium teak outdoor dining set built to withstand the elements. Includes large dining table and 6 matching chairs with cushions.', 2899, 3299, '6', 'Outdoor Luxury', 1, 8, 4.9, 145, 200, 75, 100, 95, 1],
+    ['16', 'Wicker Patio Lounge Set', 'A comfortable wicker patio lounge set perfect for relaxation. Features weather-resistant synthetic wicker and aluminum frame.', 1599, null, '6', 'Patio Perfect', 1, 12, 4.4, 87, 180, 85, 90, 45, 0]
   ];
 
   products.forEach(product => {
@@ -280,13 +302,40 @@ async function insertInitialData() {
   `);
 
   const images = [
-    ['img1', '1', 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modern Sectional Sofa', 0],
-    ['img2', '1', 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modern Sectional Sofa Side View', 1],
-    ['img3', '2', 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800', 'Elegant Dining Table Set', 0],
-    ['img4', '3', 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=800', 'Luxury King Size Bed', 0],
-    ['img5', '4', 'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=800', 'Executive Office Chair', 0],
-    ['img6', '5', 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modern Coffee Table', 0],
-    ['img7', '6', 'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800', 'Vintage Armchair', 0]
+    // Living Room
+    ['img1', '1', 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800', 'Luxe Velvet Sectional Sofa', 0],
+    ['img2', '1', 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800', 'Sectional Sofa Side View', 1],
+    ['img3', '1', 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=800', 'Sectional Sofa Detail', 2],
+    ['img4', '2', 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800', 'Mid-Century Modern Coffee Table', 0],
+    ['img5', '2', 'https://images.pexels.com/photos/1571471/pexels-photo-1571471.jpeg?auto=compress&cs=tinysrgb&w=800', 'Coffee Table Detail', 1],
+    ['img6', '3', 'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800', 'Scandinavian Accent Chair', 0],
+    ['img7', '3', 'https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=800', 'Accent Chair Side View', 1],
+    ['img8', '4', 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=800', 'Industrial TV Console', 0],
+    
+    // Bedroom
+    ['img9', '5', 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=800', 'Upholstered Platform Bed', 0],
+    ['img10', '5', 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=800', 'Platform Bed Detail', 1],
+    ['img11', '6', 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modern Nightstand Set', 0],
+    ['img12', '7', 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=800', 'Vintage Wooden Dresser', 0],
+    
+    // Dining Room
+    ['img13', '8', 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800', 'Farmhouse Dining Table Set', 0],
+    ['img14', '8', 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=800', 'Dining Set Detail', 1],
+    ['img15', '9', 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modern Glass Dining Table', 0],
+    ['img16', '10', 'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800', 'Leather Dining Chairs', 0],
+    
+    // Office
+    ['img17', '11', 'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=800', 'Executive Leather Office Chair', 0],
+    ['img18', '11', 'https://images.pexels.com/photos/1957477/pexels-photo-1957477.jpeg?auto=compress&cs=tinysrgb&w=800', 'Office Chair Detail', 1],
+    ['img19', '12', 'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=800', 'Standing Desk Converter', 0],
+    
+    // Storage
+    ['img20', '13', 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800', 'Modular Bookshelf System', 0],
+    ['img21', '14', 'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800', 'Storage Ottoman Bench', 0],
+    
+    // Outdoor
+    ['img22', '15', 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=800', 'Teak Outdoor Dining Set', 0],
+    ['img23', '16', 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=800', 'Wicker Patio Lounge Set', 0]
   ];
 
   images.forEach(image => {
@@ -300,19 +349,33 @@ async function insertInitialData() {
   `);
 
   const materials = [
-    ['mat1', '1', 'Premium Fabric'],
-    ['mat2', '1', 'Hardwood Frame'],
-    ['mat3', '1', 'High-Density Foam'],
-    ['mat4', '2', 'Solid Oak Wood'],
-    ['mat5', '2', 'Natural Finish'],
-    ['mat6', '3', 'Velvet Upholstery'],
-    ['mat7', '3', 'Solid Wood Frame'],
-    ['mat8', '4', 'Genuine Leather'],
-    ['mat9', '4', 'Steel Frame'],
-    ['mat10', '5', 'Tempered Glass'],
-    ['mat11', '5', 'Stainless Steel'],
-    ['mat12', '6', 'Genuine Leather'],
-    ['mat13', '6', 'Hardwood Frame']
+    // Living Room
+    ['mat1', '1', 'Premium Velvet'], ['mat2', '1', 'Hardwood Frame'], ['mat3', '1', 'High-Density Foam'], ['mat4', '1', 'Steel Springs'],
+    ['mat5', '2', 'Solid Walnut Wood'], ['mat6', '2', 'Natural Oil Finish'],
+    ['mat7', '3', 'Oak Wood'], ['mat8', '3', 'Linen Fabric'], ['mat9', '3', 'Foam Cushioning'],
+    ['mat10', '4', 'Reclaimed Wood'], ['mat11', '4', 'Steel Frame'], ['mat12', '4', 'Powder Coating'],
+    
+    // Bedroom
+    ['mat13', '5', 'Linen Upholstery'], ['mat14', '5', 'Solid Wood Frame'], ['mat15', '5', 'Button Tufting'],
+    ['mat16', '6', 'Engineered Wood'], ['mat17', '6', 'Soft-Close Hardware'], ['mat18', '6', 'LED Strips'],
+    ['mat19', '7', 'Solid Mahogany'], ['mat20', '7', 'Dovetail Joints'], ['mat21', '7', 'Brass Hardware'],
+    
+    // Dining Room
+    ['mat22', '8', 'Reclaimed Oak'], ['mat23', '8', 'Weathered Finish'], ['mat24', '8', 'Cushioned Seats'],
+    ['mat25', '9', 'Tempered Glass'], ['mat26', '9', 'Stainless Steel'], ['mat27', '9', 'Chrome Finish'],
+    ['mat28', '10', 'Top-Grain Leather'], ['mat29', '10', 'Oak Wood'], ['mat30', '10', 'High-Density Foam'],
+    
+    // Office
+    ['mat31', '11', 'Genuine Leather'], ['mat32', '11', 'Steel Frame'], ['mat33', '11', 'Memory Foam'], ['mat34', '11', 'Pneumatic Lift'],
+    ['mat35', '12', 'Steel Frame'], ['mat36', '12', 'MDF Surface'], ['mat37', '12', 'Gas Spring Mechanism'],
+    
+    // Storage
+    ['mat38', '13', 'Solid Pine Wood'], ['mat39', '13', 'Adjustable Shelves'], ['mat40', '13', 'Metal Brackets'],
+    ['mat41', '14', 'Fabric Upholstery'], ['mat42', '14', 'MDF Frame'], ['mat43', '14', 'Soft-Close Hinges'],
+    
+    // Outdoor
+    ['mat44', '15', 'Grade A Teak Wood'], ['mat45', '15', 'Stainless Steel Hardware'], ['mat46', '15', 'Weather-Resistant Cushions'],
+    ['mat47', '16', 'Synthetic Wicker'], ['mat48', '16', 'Aluminum Frame'], ['mat49', '16', 'Weather-Resistant Fabric']
   ];
 
   materials.forEach(material => {
@@ -326,19 +389,33 @@ async function insertInitialData() {
   `);
 
   const colors = [
-    ['col1', '1', 'Charcoal Gray'],
-    ['col2', '1', 'Navy Blue'],
-    ['col3', '1', 'Cream White'],
-    ['col4', '2', 'Natural Oak'],
-    ['col5', '2', 'Dark Walnut'],
-    ['col6', '3', 'Deep Navy'],
-    ['col7', '3', 'Charcoal'],
-    ['col8', '4', 'Black'],
-    ['col9', '4', 'Brown'],
-    ['col10', '5', 'Clear Glass'],
-    ['col11', '5', 'Smoked Glass'],
-    ['col12', '6', 'Cognac Brown'],
-    ['col13', '6', 'Black']
+    // Living Room
+    ['col1', '1', 'Navy Blue'], ['col2', '1', 'Emerald Green'], ['col3', '1', 'Charcoal Gray'], ['col4', '1', 'Burgundy'],
+    ['col5', '2', 'Walnut'], ['col6', '2', 'Oak'], ['col7', '2', 'Cherry'],
+    ['col8', '3', 'Light Gray'], ['col9', '3', 'Cream'], ['col10', '3', 'Sage Green'], ['col11', '3', 'Dusty Pink'],
+    ['col12', '4', 'Natural Wood'], ['col13', '4', 'Dark Walnut'],
+    
+    // Bedroom
+    ['col14', '5', 'Oatmeal'], ['col15', '5', 'Charcoal'], ['col16', '5', 'Navy'], ['col17', '5', 'Blush'],
+    ['col18', '6', 'White'], ['col19', '6', 'Black'], ['col20', '6', 'Walnut'],
+    ['col21', '7', 'Mahogany'], ['col22', '7', 'Cherry'], ['col23', '7', 'Natural Oak'],
+    
+    // Dining Room
+    ['col24', '8', 'Weathered Oak'], ['col25', '8', 'Natural Pine'],
+    ['col26', '9', 'Clear Glass'], ['col27', '9', 'Smoked Glass'],
+    ['col28', '10', 'Cognac Brown'], ['col29', '10', 'Black'], ['col30', '10', 'Caramel'],
+    
+    // Office
+    ['col31', '11', 'Black'], ['col32', '11', 'Brown'], ['col33', '11', 'Burgundy'],
+    ['col34', '12', 'Black'], ['col35', '12', 'White'], ['col36', '12', 'Walnut'],
+    
+    // Storage
+    ['col37', '13', 'Natural Pine'], ['col38', '13', 'White'], ['col39', '13', 'Espresso'],
+    ['col40', '14', 'Gray'], ['col41', '14', 'Navy'], ['col42', '14', 'Beige'], ['col43', '14', 'Charcoal'],
+    
+    // Outdoor
+    ['col44', '15', 'Natural Teak'], ['col45', '15', 'Weathered Teak'],
+    ['col46', '16', 'Natural Brown'], ['col47', '16', 'Charcoal Gray']
   ];
 
   colors.forEach(color => {
