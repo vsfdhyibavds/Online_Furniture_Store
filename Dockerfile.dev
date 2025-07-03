@@ -11,7 +11,7 @@ COPY package*.json ./
 # Force compilation from source for native modules
 ENV npm_config_build_from_source=true
 
-RUN npm install
+RUN npm ci
 
 # Copy source code
 COPY . .
