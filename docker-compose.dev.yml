@@ -16,6 +16,7 @@ services:
       - FRONTEND_URL=http://localhost:5173
     volumes:
       - .:/app
+      - /app/node_modules
       - furniture_dev_uploads:/app/server/uploads
       - furniture_dev_db:/app/server/database
     networks:
