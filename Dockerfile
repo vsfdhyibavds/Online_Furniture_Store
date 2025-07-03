@@ -5,6 +5,9 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
+# Install build dependencies for native modules
+RUN apk add --no-cache build-base python3
+
 # Copy package files
 COPY package*.json ./
 COPY server/package*.json ./server/
