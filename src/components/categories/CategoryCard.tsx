@@ -10,7 +10,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <Link to={`/category/${category.slug}`}>
+    <Link to={`/search?category=${category.slug}`}>
       <Card className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
         <div className="relative h-48">
           <img

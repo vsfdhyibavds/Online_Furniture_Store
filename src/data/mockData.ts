@@ -46,7 +46,7 @@ export const categories: Category[] = [
 ];
 
 export const products: Product[] = [
-  // Living Room Furniture
+  // Living Room Furniture - Featured Products
   {
     id: '1',
     name: 'Luxe Velvet Sectional Sofa',
@@ -146,10 +146,58 @@ export const products: Product[] = [
     createdAt: '2024-01-08T10:00:00Z',
     updatedAt: '2024-01-08T10:00:00Z',
   },
+  {
+    id: '5',
+    name: 'Luxury Leather Recliner',
+    description: 'Indulge in ultimate relaxation with this premium leather recliner. Features genuine top-grain leather, power recline mechanism, and built-in USB charging ports. The perfect addition to any living room or home theater.',
+    price: 1899,
+    originalPrice: 2299,
+    images: [
+      'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[0],
+    brand: 'Comfort Plus',
+    inStock: true,
+    stockQuantity: 14,
+    rating: 4.9,
+    reviewCount: 187,
+    dimensions: { width: 85, height: 105, depth: 95 },
+    weight: 55,
+    materials: ['Top-Grain Leather', 'Steel Mechanism', 'Memory Foam'],
+    colors: ['Cognac Brown', 'Black', 'Caramel'],
+    tags: ['recliner', 'leather', 'power', 'luxury'],
+    featured: true,
+    createdAt: '2024-01-14T10:00:00Z',
+    updatedAt: '2024-01-14T10:00:00Z',
+  },
+  {
+    id: '6',
+    name: 'Modern Fabric Sofa',
+    description: 'A contemporary 3-seater sofa with clean lines and comfortable cushioning. Features durable fabric upholstery, solid wood frame, and removable cushion covers for easy maintenance.',
+    price: 1299,
+    images: [
+      'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[0],
+    brand: 'Modern Living',
+    inStock: true,
+    stockQuantity: 22,
+    rating: 4.4,
+    reviewCount: 98,
+    dimensions: { width: 200, height: 85, depth: 90 },
+    weight: 65,
+    materials: ['Performance Fabric', 'Hardwood Frame', 'High-Density Foam'],
+    colors: ['Light Gray', 'Navy Blue', 'Charcoal'],
+    tags: ['sofa', 'modern', 'fabric', '3-seater'],
+    featured: false,
+    createdAt: '2024-01-11T10:00:00Z',
+    updatedAt: '2024-01-11T10:00:00Z',
+  },
 
   // Bedroom Furniture
   {
-    id: '5',
+    id: '7',
     name: 'Upholstered Platform Bed',
     description: 'A sophisticated platform bed with luxurious upholstered headboard. Features button tufting, premium linen fabric, and a low-profile design. The sturdy platform eliminates the need for a box spring while providing excellent mattress support.',
     price: 1299,
@@ -174,7 +222,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-14T10:00:00Z',
   },
   {
-    id: '6',
+    id: '8',
     name: 'Modern Nightstand Set',
     description: 'Sleek nightstands with clean lines and practical storage. Features soft-close drawers, wireless charging pad on top, and integrated LED lighting. Sold as a set of two matching pieces.',
     price: 599,
@@ -198,7 +246,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-11T10:00:00Z',
   },
   {
-    id: '7',
+    id: '9',
     name: 'Vintage Wooden Dresser',
     description: 'A beautifully crafted dresser with vintage charm and modern functionality. Features six spacious drawers with dovetail joints, antique brass hardware, and a rich mahogany finish. Perfect for storing clothing and bedroom essentials.',
     price: 1199,
@@ -220,10 +268,33 @@ export const products: Product[] = [
     createdAt: '2024-01-09T10:00:00Z',
     updatedAt: '2024-01-09T10:00:00Z',
   },
+  {
+    id: '10',
+    name: 'Contemporary Wardrobe',
+    description: 'A spacious wardrobe with modern design and ample storage. Features hanging space, adjustable shelves, and full-length mirror. Perfect for organizing clothes and accessories in style.',
+    price: 1599,
+    images: [
+      'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[1],
+    brand: 'Storage Solutions',
+    inStock: true,
+    stockQuantity: 12,
+    rating: 4.6,
+    reviewCount: 67,
+    dimensions: { width: 120, height: 200, depth: 60 },
+    weight: 85,
+    materials: ['Engineered Wood', 'Mirror Glass', 'Metal Hardware'],
+    colors: ['White', 'Black', 'Walnut'],
+    tags: ['wardrobe', 'storage', 'mirror', 'contemporary'],
+    featured: false,
+    createdAt: '2024-01-07T10:00:00Z',
+    updatedAt: '2024-01-07T10:00:00Z',
+  },
 
   // Dining Room Furniture
   {
-    id: '8',
+    id: '11',
     name: 'Farmhouse Dining Table Set',
     description: 'A stunning farmhouse dining table that seats 8 comfortably. Crafted from reclaimed oak with a weathered finish and sturdy trestle base. Includes 6 matching Windsor-style chairs with comfortable cushioned seats.',
     price: 2199,
@@ -248,7 +319,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-13T10:00:00Z',
   },
   {
-    id: '9',
+    id: '12',
     name: 'Modern Glass Dining Table',
     description: 'An elegant glass dining table with a sculptural metal base. The tempered glass top provides a sophisticated look while the unique base adds artistic flair. Seats 6 people comfortably.',
     price: 1599,
@@ -271,7 +342,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-07T10:00:00Z',
   },
   {
-    id: '10',
+    id: '13',
     name: 'Leather Dining Chairs (Set of 4)',
     description: 'Premium leather dining chairs with ergonomic design and superior comfort. Features genuine top-grain leather, solid oak legs, and high-density foam cushioning. Sold as a set of 4 matching chairs.',
     price: 899,
@@ -293,10 +364,33 @@ export const products: Product[] = [
     createdAt: '2024-01-06T10:00:00Z',
     updatedAt: '2024-01-06T10:00:00Z',
   },
+  {
+    id: '14',
+    name: 'Extendable Dining Table',
+    description: 'A versatile dining table that extends to accommodate more guests. Features a smooth extension mechanism and beautiful wood grain finish. Perfect for both everyday dining and entertaining.',
+    price: 1299,
+    images: [
+      'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[2],
+    brand: 'Flexible Dining',
+    inStock: true,
+    stockQuantity: 14,
+    rating: 4.5,
+    reviewCount: 73,
+    dimensions: { width: 160, height: 75, depth: 90 },
+    weight: 65,
+    materials: ['Solid Wood', 'Extension Mechanism', 'Natural Finish'],
+    colors: ['Natural Oak', 'Dark Walnut', 'White Oak'],
+    tags: ['dining-table', 'extendable', 'versatile', 'entertaining'],
+    featured: false,
+    createdAt: '2024-01-05T10:00:00Z',
+    updatedAt: '2024-01-05T10:00:00Z',
+  },
 
   // Office Furniture
   {
-    id: '11',
+    id: '15',
     name: 'Executive Leather Office Chair',
     description: 'A premium executive chair designed for long work sessions. Features genuine leather upholstery, lumbar support, adjustable height, and 360-degree swivel. The high-back design provides excellent support for the neck and shoulders.',
     price: 1299,
@@ -320,7 +414,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-05T10:00:00Z',
   },
   {
-    id: '12',
+    id: '16',
     name: 'Standing Desk Converter',
     description: 'Transform any desk into a standing workstation with this adjustable desk converter. Features dual monitor support, keyboard tray, and smooth height adjustment. Promotes better posture and reduces back strain.',
     price: 399,
@@ -342,10 +436,33 @@ export const products: Product[] = [
     createdAt: '2024-01-04T10:00:00Z',
     updatedAt: '2024-01-04T10:00:00Z',
   },
+  {
+    id: '17',
+    name: 'Modern Office Desk',
+    description: 'A sleek and functional office desk with clean lines and ample workspace. Features built-in cable management, drawers for storage, and a durable laminate surface that resists scratches and stains.',
+    price: 799,
+    images: [
+      'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[3],
+    brand: 'Office Pro',
+    inStock: true,
+    stockQuantity: 18,
+    rating: 4.3,
+    reviewCount: 94,
+    dimensions: { width: 150, height: 75, depth: 70 },
+    weight: 45,
+    materials: ['Laminate Surface', 'Steel Frame', 'Soft-Close Drawers'],
+    colors: ['White', 'Black', 'Walnut', 'Gray'],
+    tags: ['office-desk', 'modern', 'storage', 'cable-management'],
+    featured: false,
+    createdAt: '2024-01-03T10:00:00Z',
+    updatedAt: '2024-01-03T10:00:00Z',
+  },
 
   // Storage Furniture
   {
-    id: '13',
+    id: '18',
     name: 'Modular Bookshelf System',
     description: 'A versatile modular bookshelf system that grows with your needs. Features solid wood construction, adjustable shelves, and stackable design. Perfect for books, decorative items, and storage baskets.',
     price: 799,
@@ -368,7 +485,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-03T10:00:00Z',
   },
   {
-    id: '14',
+    id: '19',
     name: 'Storage Ottoman Bench',
     description: 'A multifunctional storage ottoman that serves as seating, footrest, and storage. Features premium fabric upholstery, hidden storage compartment, and sturdy construction. Perfect for entryways, bedrooms, or living rooms.',
     price: 299,
@@ -390,10 +507,33 @@ export const products: Product[] = [
     createdAt: '2024-01-02T10:00:00Z',
     updatedAt: '2024-01-02T10:00:00Z',
   },
+  {
+    id: '20',
+    name: 'Industrial Storage Cabinet',
+    description: 'A robust storage cabinet with industrial design elements. Features metal frame, wood shelves, and glass doors. Perfect for displaying items while keeping them dust-free.',
+    price: 1099,
+    images: [
+      'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[4],
+    brand: 'Industrial Design',
+    inStock: true,
+    stockQuantity: 12,
+    rating: 4.6,
+    reviewCount: 54,
+    dimensions: { width: 80, height: 180, depth: 40 },
+    weight: 65,
+    materials: ['Steel Frame', 'Wood Shelves', 'Tempered Glass'],
+    colors: ['Black Metal', 'Bronze'],
+    tags: ['storage-cabinet', 'industrial', 'glass-doors', 'display'],
+    featured: false,
+    createdAt: '2024-01-01T10:00:00Z',
+    updatedAt: '2024-01-01T10:00:00Z',
+  },
 
   // Outdoor Furniture
   {
-    id: '15',
+    id: '21',
     name: 'Teak Outdoor Dining Set',
     description: 'A premium teak outdoor dining set built to withstand the elements. Includes a large dining table and 6 matching chairs with comfortable cushions. The natural teak wood develops a beautiful patina over time.',
     price: 2899,
@@ -417,7 +557,7 @@ export const products: Product[] = [
     updatedAt: '2024-01-01T10:00:00Z',
   },
   {
-    id: '16',
+    id: '22',
     name: 'Wicker Patio Lounge Set',
     description: 'A comfortable wicker patio lounge set perfect for relaxation. Features weather-resistant synthetic wicker, aluminum frame, and plush cushions. Includes 2 lounge chairs, 1 loveseat, and a coffee table.',
     price: 1599,
@@ -438,6 +578,52 @@ export const products: Product[] = [
     featured: false,
     createdAt: '2023-12-30T10:00:00Z',
     updatedAt: '2023-12-30T10:00:00Z',
+  },
+  {
+    id: '23',
+    name: 'Outdoor Sectional Sofa',
+    description: 'A spacious outdoor sectional sofa designed for entertaining. Features modular design, weather-resistant cushions, and durable aluminum frame. Perfect for creating an outdoor living room.',
+    price: 2299,
+    images: [
+      'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[5],
+    brand: 'Outdoor Living',
+    inStock: true,
+    stockQuantity: 6,
+    rating: 4.7,
+    reviewCount: 112,
+    dimensions: { width: 250, height: 85, depth: 150 },
+    weight: 85,
+    materials: ['Aluminum Frame', 'Weather-Resistant Fabric', 'Quick-Dry Foam'],
+    colors: ['Charcoal', 'Navy', 'Beige'],
+    tags: ['outdoor', 'sectional', 'modular', 'entertaining'],
+    featured: false,
+    createdAt: '2023-12-28T10:00:00Z',
+    updatedAt: '2023-12-28T10:00:00Z',
+  },
+  {
+    id: '24',
+    name: 'Garden Dining Chairs (Set of 4)',
+    description: 'Elegant garden dining chairs with classic design. Features powder-coated steel frame and comfortable mesh seating. Stackable for easy storage during off-season.',
+    price: 599,
+    images: [
+      'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ],
+    category: categories[5],
+    brand: 'Garden Classics',
+    inStock: true,
+    stockQuantity: 20,
+    rating: 4.2,
+    reviewCount: 68,
+    dimensions: { width: 55, height: 85, depth: 60 },
+    weight: 8,
+    materials: ['Powder-Coated Steel', 'Mesh Fabric', 'UV-Resistant Coating'],
+    colors: ['Black', 'White', 'Bronze'],
+    tags: ['outdoor', 'dining-chairs', 'stackable', 'mesh'],
+    featured: false,
+    createdAt: '2023-12-26T10:00:00Z',
+    updatedAt: '2023-12-26T10:00:00Z',
   },
 ];
 
@@ -507,16 +693,16 @@ export const mockOrders: Order[] = [
     items: [
       {
         id: '3',
-        productId: '5',
-        product: products[4],
+        productId: '7',
+        product: products[6],
         quantity: 1,
         price: 1299,
         selectedColor: 'Oatmeal',
       },
       {
         id: '4',
-        productId: '6',
-        product: products[5],
+        productId: '8',
+        product: products[7],
         quantity: 1,
         price: 599,
       },
@@ -612,7 +798,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: '4',
-    productId: '5',
+    productId: '7',
     userId: '4',
     user: {
       firstName: 'David',
@@ -627,7 +813,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: '5',
-    productId: '8',
+    productId: '11',
     userId: '5',
     user: {
       firstName: 'Lisa',
@@ -640,4 +826,44 @@ export const mockReviews: Review[] = [
     helpful: 12,
     createdAt: '2024-01-12T10:00:00Z',
   },
+  {
+    id: '6',
+    productId: '5',
+    userId: '6',
+    user: {
+      firstName: 'Robert',
+      lastName: 'Davis',
+    },
+    rating: 5,
+    title: 'Ultimate comfort recliner',
+    comment: 'This leather recliner is incredibly comfortable. The power recline feature works smoothly, and the USB charging ports are a nice touch. The leather quality is excellent and the chair looks great in our living room.',
+    verified: true,
+    helpful: 28,
+    createdAt: '2024-01-10T10:00:00Z',
+  },
+  {
+    id: '7',
+    productId: '21',
+    userId: '7',
+    user: {
+      firstName: 'Jennifer',
+      lastName: 'Brown',
+    },
+    rating: 5,
+    title: 'Perfect for outdoor entertaining',
+    comment: 'We love this teak dining set! It\'s perfect for hosting dinner parties on our patio. The quality is exceptional and it has held up beautifully through all weather conditions. The cushions are very comfortable.',
+    verified: true,
+    helpful: 19,
+    createdAt: '2024-01-08T10:00:00Z',
+  },
 ];
+
+// Helper functions to get specific product categories
+export const getFeaturedProducts = () => products.filter(product => product.featured);
+export const getLivingRoomProducts = () => products.filter(product => product.category.slug === 'living-room');
+export const getBedroomProducts = () => products.filter(product => product.category.slug === 'bedroom');
+export const getDiningRoomProducts = () => products.filter(product => product.category.slug === 'dining-room');
+export const getOfficeProducts = () => products.filter(product => product.category.slug === 'office');
+export const getStorageProducts = () => products.filter(product => product.category.slug === 'storage');
+export const getOutdoorProducts = () => products.filter(product => product.category.slug === 'outdoor');
+export const getDealsProducts = () => products.filter(product => product.originalPrice && product.originalPrice > product.price);

@@ -5,41 +5,28 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
 import { ProductCard } from '../components/products/ProductCard';
-import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '../lib/api';
+import { products, categories } from '../data/mockData';
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    category: '',
+    category: searchParams.get('category') || '',
     minPrice: '',
     maxPrice: '',
     sortBy: 'relevance',
     sortOrder: 'desc'
   });
 
-  const { data: searchResults, isLoading } = useQuery({
-    queryKey: ['search', searchQuery, filters],
-    queryFn: () => apiClient.getProducts({
-      search: searchQuery,
-      ...filters,
-      minPrice: filters.minPrice ? parseFloat(filters.minPrice) : undefined,
-      maxPrice: filters.maxPrice ? parseFloat(filters.maxPrice) : undefined,
-    }),
-    enabled: !!searchQuery,
-  });
-
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => apiClient.getCategories(),
-  });
-
   useEffect(() => {
     const query = searchParams.get('q');
+    const category = searchParams.get('category');
     if (query) {
       setSearchQuery(query);
+    }
+    if (category) {
+      setFilters(prev => ({ ...prev, category }));
     }
   }, [searchParams]);
 
@@ -64,8 +51,58 @@ export function SearchPage() {
     });
   };
 
-  const products = searchResults?.data || [];
-  const categories = categoriesData?.data || [];
+  // Filter and search products
+  let filteredProducts = products;
+
+  // Apply search query
+  if (searchQuery) {
+    filteredProducts = filteredProducts.filter(product =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  }
+
+  // Apply category filter
+  if (filters.category) {
+    filteredProducts = filteredProducts.filter(product =>
+      product.category.slug === filters.category
+    );
+  }
+
+  // Apply price filters
+  if (filters.minPrice) {
+    filteredProducts = filteredProducts.filter(product =>
+      product.price >= parseFloat(filters.minPrice)
+    );
+  }
+
+  if (filters.maxPrice) {
+    filteredProducts = filteredProducts.filter(product =>
+      product.price <= parseFloat(filters.maxPrice)
+    );
+  }
+
+  // Apply sorting
+  filteredProducts = [...filteredProducts].sort((a, b) => {
+    switch (filters.sortBy) {
+      case 'price':
+        return filters.sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+      case 'name':
+        return filters.sortOrder === 'asc' 
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      case 'rating':
+        return filters.sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
+      case 'created_at':
+        return filters.sortOrder === 'asc'
+          ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -93,13 +130,15 @@ export function SearchPage() {
           </Button>
         </form>
 
-        {searchQuery && (
+        {(searchQuery || filters.category) && (
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">
-              Search results for "{searchQuery}"
+              {searchQuery ? `Search results for "${searchQuery}"` : 
+               filters.category ? `${categories.find(c => c.slug === filters.category)?.name || 'Category'} Furniture` :
+               'All Products'}
             </h1>
             <p className="text-gray-600">
-              {products.length} {products.length === 1 ? 'result' : 'results'} found
+              {filteredProducts.length} {filteredProducts.length === 1 ? 'result' : 'results'} found
             </p>
           </div>
         )}
@@ -128,7 +167,7 @@ export function SearchPage() {
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
                       <option value="">All Categories</option>
-                      {categories.map((category: any) => (
+                      {categories.map((category) => (
                         <option key={category.id} value={category.slug}>
                           {category.name}
                         </option>
@@ -191,17 +230,7 @@ export function SearchPage() {
 
         {/* Results */}
         <div className={showFilters ? 'lg:col-span-3' : 'lg:col-span-4'}>
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              ))}
-            </div>
-          ) : products.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div className="text-center py-16">
               <Search className="h-24 w-24 text-gray-300 mx-auto mb-6" />
               <h2 className="text-2xl font-bold mb-4">No results found</h2>
@@ -212,7 +241,7 @@ export function SearchPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product: any) => (
+              {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
