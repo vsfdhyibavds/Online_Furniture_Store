@@ -4,19 +4,52 @@ import { Star, Heart, ShoppingCart, Truck, Shield, RotateCcw } from 'lucide-reac
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent } from '../components/ui/card';
-import { products, mockReviews } from '../data/mockData';
 import { formatPrice } from '../lib/utils';
 import { useCartStore } from '../stores/useCartStore';
 import { useToast } from '../hooks/use-toast';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '../lib/api';
 
 export function ProductPage() {
   const { id } = useParams<{ id: string }>();
-  const product = products.find(p => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCartStore();
   const { toast } = useToast();
+
+  const { data: productData, isLoading } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => apiClient.getProduct(id!),
+    enabled: !!id,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="animate-pulse">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="space-y-4">
+              <div className="aspect-square bg-gray-200 rounded-lg"></div>
+              <div className="grid grid-cols-4 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="aspect-square bg-gray-200 rounded-lg"></div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+              <div className="h-20 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const product = productData?.data;
 
   if (!product) {
     return (
@@ -25,8 +58,6 @@ export function ProductPage() {
       </div>
     );
   }
-
-  const productReviews = mockReviews.filter(review => review.productId === product.id);
 
   const handleAddToCart = () => {
     addItem(product, quantity, selectedColor);
@@ -54,7 +85,7 @@ export function ProductPage() {
           </div>
           {product.images.length > 1 && (
             <div className="grid grid-cols-4 gap-4">
-              {product.images.map((image, index) => (
+              {product.images.map((image: string, index: number) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -118,11 +149,11 @@ export function ProductPage() {
           <p className="text-gray-600 leading-relaxed">{product.description}</p>
 
           {/* Color Selection */}
-          {product.colors.length > 0 && (
+          {product.colors && product.colors.length > 0 && (
             <div>
               <h3 className="font-semibold mb-3">Color</h3>
               <div className="flex space-x-3">
-                {product.colors.map((color) => (
+                {product.colors.map((color: string) => (
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
@@ -215,7 +246,7 @@ export function ProductPage() {
               Specifications
             </button>
             <button className="py-4 px-1 text-gray-500 hover:text-gray-700">
-              Reviews ({productReviews.length})
+              Reviews ({product.reviewCount})
             </button>
           </nav>
         </div>
@@ -226,11 +257,11 @@ export function ProductPage() {
               {product.description}
             </p>
             
-            {product.materials.length > 0 && (
+            {product.materials && product.materials.length > 0 && (
               <div className="mb-6">
                 <h4 className="font-semibold mb-3">Materials</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {product.materials.map((material, index) => (
+                  {product.materials.map((material: string, index: number) => (
                     <li key={index} className="text-gray-600">{material}</li>
                   ))}
                 </ul>
@@ -250,69 +281,6 @@ export function ProductPage() {
           </div>
         </div>
       </div>
-
-      {/* Reviews Section */}
-      {productReviews.length > 0 && (
-        <div className="mt-16">
-          <h3 className="text-2xl font-bold mb-8">Customer Reviews</h3>
-          <div className="space-y-6">
-            {productReviews.map((review) => (
-              <Card key={review.id}>
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      {review.user.avatar ? (
-                        <img
-                          src={review.user.avatar}
-                          alt={`${review.user.firstName} ${review.user.lastName}`}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                          <span className="text-gray-600 font-medium">
-                            {review.user.firstName[0]}{review.user.lastName[0]}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <h4 className="font-semibold">
-                          {review.user.firstName} {review.user.lastName}
-                        </h4>
-                        {review.verified && (
-                          <Badge variant="secondary" className="text-xs">
-                            Verified Purchase
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-2 mb-3">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${
-                                i < review.rating
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600">
-                          {new Date(review.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <h5 className="font-medium mb-2">{review.title}</h5>
-                      <p className="text-gray-600">{review.comment}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -35,12 +35,13 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
-
+      
       if (!response.ok) {
-        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
+      const data = await response.json();
       return data;
     } catch (error) {
       console.error('API request failed:', error);
@@ -115,7 +116,14 @@ class ApiClient {
 
   // Product endpoints
   async getProducts(params: any = {}) {
-    const searchParams = new URLSearchParams(params);
+    const searchParams = new URLSearchParams();
+    
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    });
+
     return this.request<{
       success: boolean;
       data: any[];
@@ -135,6 +143,18 @@ class ApiClient {
       success: boolean;
       data: any[];
     }>('/products/categories/all');
+  }
+
+  async getFeaturedProducts() {
+    return this.getProducts({ featured: true, limit: 6 });
+  }
+
+  async getProductsByCategory(categorySlug: string, limit?: number) {
+    return this.getProducts({ category: categorySlug, limit });
+  }
+
+  async searchProducts(query: string, filters: any = {}) {
+    return this.getProducts({ search: query, ...filters });
   }
 
   // Order endpoints

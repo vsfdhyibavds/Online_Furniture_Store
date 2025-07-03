@@ -6,12 +6,31 @@ import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { ProductCard } from '../components/products/ProductCard';
 import { CategoryCard } from '../components/categories/CategoryCard';
-import { products, categories, getFeaturedProducts } from '../data/mockData';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '../lib/api';
 
 export function HomePage() {
-  const featuredProducts = getFeaturedProducts();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [email, setEmail] = useState('');
+
+  const { data: productsData } = useQuery({
+    queryKey: ['featured-products'],
+    queryFn: () => apiClient.getFeaturedProducts(),
+  });
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => apiClient.getCategories(),
+  });
+
+  const { data: bestSellersData } = useQuery({
+    queryKey: ['best-sellers'],
+    queryFn: () => apiClient.getProducts({ sortBy: 'rating', sortOrder: 'desc', limit: 8 }),
+  });
+
+  const featuredProducts = productsData?.data || [];
+  const categories = categoriesData?.data || [];
+  const bestSellers = bestSellersData?.data || [];
 
   const heroSlides = [
     {
@@ -40,8 +59,10 @@ export function HomePage() {
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) {
+      // Here you would typically send the email to your backend
       console.log('Newsletter signup:', email);
       setEmail('');
+      // Show success message
       alert('Thank you for subscribing to our newsletter!');
     }
   };
@@ -135,7 +156,7 @@ export function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.slice(0, 6).map((category) => (
+            {categories.slice(0, 6).map((category: any) => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
@@ -168,7 +189,7 @@ export function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.slice(0, 6).map((product) => (
+            {featuredProducts.map((product: any) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -185,12 +206,9 @@ export function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products
-              .sort((a, b) => b.reviewCount - a.reviewCount)
-              .slice(0, 8)
-              .map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            {bestSellers.map((product: any) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>
