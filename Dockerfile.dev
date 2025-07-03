@@ -13,6 +13,9 @@ ENV npm_config_build_from_source=true
 
 RUN npm ci
 
+# Rebuild native modules for the container environment
+RUN npm rebuild
+
 # Copy source code
 COPY . .
 
