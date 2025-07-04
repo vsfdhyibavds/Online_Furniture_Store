@@ -27,7 +27,13 @@ try {
 } catch (error) {
   logger.error('Failed to initialize database:', error);
   console.error('❌ Database initialization failed:', error.message);
-  process.exit(1);
+  
+  // Only exit in production environment
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1);
+  } else {
+    console.warn('⚠️  Continuing in development mode despite database initialization failure');
+  }
 }
 
 // Security middleware
