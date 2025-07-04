@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function PrivacyPolicy() {
     const navigate = useNavigate();
+    const [now, setNow] = useState(new Date());
+    useEffect(() => {
+        const interval = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(interval);
+    }, []);
     return (
         <div className="container mx-auto py-12 px-4 flex justify-center">
             <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full">
@@ -13,7 +18,10 @@ export function PrivacyPolicy() {
                     ← Back
                 </button>
                 <h1 className="text-3xl font-bold mb-4 text-primary">FurnStore Privacy Policy</h1>
-                <p className="text-gray-700 mb-2">Last Updated: July 4, 2025</p>
+                <p className="text-gray-700 mb-2">
+                    Last Updated: July 4, 2025<br />
+                    <span className="text-xs text-gray-500">Active Timestamp: {now.toLocaleString()}</span>
+                </p>
                 <h2 className="text-xl font-semibold mt-6 mb-2">1. Information We Collect</h2>
                 <ul className="list-disc ml-6 text-gray-700">
                     <li>Personal information (name, email, phone, address) when you make a purchase</li>
