@@ -19,6 +19,9 @@ import { ContactPage } from './pages/ContactPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsOfService } from './pages/TermsOfService';
+import { CookiePolicy } from './pages/CookiePolicy';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +50,9 @@ function App() {
                 <Route path="deals" element={<DealsPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="contact" element={<ContactPage />} />
+                <Route path="privacy" element={<PrivacyPolicy />} />
+                <Route path="terms" element={<TermsOfService />} />
+                <Route path="cookies" element={<CookiePolicy />} />
                 <Route
                   path="dashboard"
                   element={
