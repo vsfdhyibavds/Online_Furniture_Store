@@ -14,6 +14,7 @@ services:
       - DATABASE_URL=/app/server/database/furniture_store.db
       - JWT_SECRET=dev-secret-key
       - FRONTEND_URL=http://localhost:5173
+      - VITE_API_URL=http://localhost:3001/api
     volumes:
       - .:/app
       - furniture_dev_uploads:/app/server/uploads
