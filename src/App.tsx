@@ -14,6 +14,8 @@ import { WishlistPage } from './pages/WishlistPage';
 import { SearchPage } from './pages/SearchPage';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { DealsPage } from './pages/DealsPage';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
@@ -43,6 +45,8 @@ function App() {
                 <Route path="search" element={<SearchPage />} />
                 <Route path="categories" element={<CategoriesPage />} />
                 <Route path="deals" element={<DealsPage />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="contact" element={<ContactPage />} />
                 <Route
                   path="dashboard"
                   element={
