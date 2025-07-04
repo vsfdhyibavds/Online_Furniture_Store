@@ -20,8 +20,15 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize database
-await initializeDatabase();
+// Initialize database with error handling
+try {
+  await initializeDatabase();
+  logger.info('Database initialized successfully');
+} catch (error) {
+  logger.error('Failed to initialize database:', error);
+  console.error('❌ Database initialization failed:', error.message);
+  process.exit(1);
+}
 
 // Security middleware
 app.use(helmet({
