@@ -8,10 +8,16 @@ export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
+      sourceType: 'module',
       globals: globals.browser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -24,5 +30,24 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
+    overrides: [
+      {
+        files: ['**/*.js', '**/*.jsx'],
+        languageOptions: {
+          parser: '@babel/eslint-parser',
+          parserOptions: {
+            requireConfigFile: false,
+            babelOptions: {
+              presets: ['@babel/preset-react'],
+            },
+            ecmaVersion: 2020,
+            sourceType: 'module',
+            ecmaFeatures: {
+              jsx: true,
+            },
+          },
+        },
+      },
+    ],
   }
 );

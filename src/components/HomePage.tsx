@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, Truck, Shield, Headphones, RefreshCw } from 'lucide-react';
+import { ArrowRight, Truck, Shield, Headphones, RefreshCw } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
+// Removed unused imports: Star, Card, CardContent, Badge
 import { ProductCard } from '../components/products/ProductCard';
 import { CategoryCard } from '../components/categories/CategoryCard';
 import { useQuery } from '@tanstack/react-query';
@@ -89,7 +88,7 @@ export function HomePage() {
             </Link>
           </div>
         </div>
-        
+
         {/* Slide Indicators */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {heroSlides.map((_, index) => (

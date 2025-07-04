@@ -23,7 +23,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
@@ -94,10 +94,10 @@ class ApiClient {
     }>('/auth/me');
   }
 
-  async updateProfile(updates: any) {
+  async updateProfile(updates: Record<string, unknown>) {
     return this.request<{
       success: boolean;
-      data: any;
+      data: unknown;
     }>('/auth/profile', {
       method: 'PUT',
       body: JSON.stringify(updates),
@@ -115,9 +115,9 @@ class ApiClient {
   }
 
   // Product endpoints
-  async getProducts(params: any = {}) {
+  async getProducts(params: Record<string, unknown> = {}) {
     const searchParams = new URLSearchParams();
-    
+
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         searchParams.append(key, String(value));
@@ -126,22 +126,22 @@ class ApiClient {
 
     return this.request<{
       success: boolean;
-      data: any[];
-      pagination: any;
+      data: unknown[];
+      pagination: unknown;
     }>(`/products?${searchParams}`);
   }
 
   async getProduct(id: string) {
     return this.request<{
       success: boolean;
-      data: any;
+      data: unknown;
     }>(`/products/${id}`);
   }
 
   async getCategories() {
     return this.request<{
       success: boolean;
-      data: any[];
+      data: unknown[];
     }>('/products/categories/all');
   }
 
@@ -158,7 +158,7 @@ class ApiClient {
   }
 
   // Order endpoints
-  async createOrder(orderData: any) {
+  async createOrder(orderData: Record<string, unknown>) {
     return this.request<{
       success: boolean;
       data: { orderId: string; total: number };
@@ -171,14 +171,14 @@ class ApiClient {
   async getMyOrders() {
     return this.request<{
       success: boolean;
-      data: any[];
+      data: unknown[];
     }>('/orders/my-orders');
   }
 
   async getOrder(id: string) {
     return this.request<{
       success: boolean;
-      data: any;
+      data: unknown;
     }>(`/orders/${id}`);
   }
 
@@ -186,21 +186,20 @@ class ApiClient {
   async getAddresses() {
     return this.request<{
       success: boolean;
-      data: any[];
+      data: unknown[];
     }>('/users/addresses');
   }
 
-  async addAddress(address: any) {
+  async addAddress(address: Record<string, unknown>) {
     return this.request<{
       success: boolean;
       data: { id: string };
     }>('/users/addresses', {
-      method: 'POST',
+
       body: JSON.stringify(address),
     });
   }
-
-  async updateAddress(id: string, updates: any) {
+  async updateAddress(id: string, updates: Record<string, unknown>) {
     return this.request<{
       success: boolean;
       message: string;
@@ -222,7 +221,7 @@ class ApiClient {
   async getWishlist() {
     return this.request<{
       success: boolean;
-      data: any[];
+      data: unknown[];
     }>('/users/wishlist');
   }
 
@@ -246,10 +245,10 @@ class ApiClient {
   }
 
   // Payment endpoints
-  async processPayment(paymentData: any) {
+  async processPayment(paymentData: Record<string, unknown>) {
     return this.request<{
       success: boolean;
-      data: any;
+      data: unknown;
     }>('/payments/process', {
       method: 'POST',
       body: JSON.stringify(paymentData),
