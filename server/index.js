@@ -43,6 +43,29 @@ app.use(helmet({
   },
 }));
 
+// CORS configuration
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+    ];
+    // allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200,
+}));
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -50,14 +73,6 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api/', limiter);
-
-// CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-domain.com'] 
-    : ['http://localhost:5173', 'http://localhost:3000'],
-  credentials: true,
-}));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
