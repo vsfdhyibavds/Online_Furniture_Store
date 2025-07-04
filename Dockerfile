@@ -5,8 +5,8 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
-# Install build dependencies for native modules
-RUN apk add --no-cache build-base python3
+# Install build dependencies for native modules and runtime libraries
+RUN apk add --no-cache build-base python3 libstdc++
 
 # Copy package files
 COPY package*.json ./
@@ -35,6 +35,9 @@ RUN npm run build
 # Production image
 FROM node:20-alpine AS runner
 WORKDIR /app
+
+# Install runtime libraries required for native modules
+RUN apk add --no-cache libstdc++
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs

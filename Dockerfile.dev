@@ -2,8 +2,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install build dependencies for native modules
-RUN apk add --no-cache build-base python3
+# Install build dependencies for native modules and runtime libraries
+RUN apk add --no-cache build-base python3 libstdc++
 
 # Install dependencies
 COPY package*.json ./
