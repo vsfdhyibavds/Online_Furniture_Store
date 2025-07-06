@@ -27,7 +27,7 @@ try {
 } catch (error) {
   logger.error('Failed to initialize database:', error);
   console.error('❌ Database initialization failed:', error.message);
-  
+
   // Only exit in production environment
   if (process.env.NODE_ENV === 'production') {
     process.exit(1);
@@ -57,6 +57,7 @@ app.use(cors({
       'http://127.0.0.1:5173',
       'http://localhost:3000',
       'http://127.0.0.1:3000',
+      'https://glistening-alpaca-7a239f.netlify.app',
     ];
     // allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
