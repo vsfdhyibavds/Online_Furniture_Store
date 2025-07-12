@@ -5,24 +5,12 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
-# Install build dependencies for native modules and runtime libraries
-RUN apk add --no-cache build-base python3 libstdc++ sqlite-dev
-
 # Copy package files
 COPY package*.json ./
 COPY server/package*.json ./server/
 
-# Force compilation from source for native modules
-ENV npm_config_build_from_source=true
-
-# Install dependencies
-RUN npm ci && npm cache clean --force
-
-# Rebuild native modules for Alpine Linux
-RUN npm rebuild
-
-# Remove development dependencies after building native modules
-RUN npm prune --production
+# Install dependencies without building native modules yet
+RUN npm ci --ignore-scripts && npm cache clean --force
 
 # Build the application
 FROM base AS builder
@@ -39,8 +27,8 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Install runtime libraries required for native modules
-RUN apk add --no-cache libstdc++
+# Install build dependencies and runtime libraries for native modules
+RUN apk add --no-cache build-base python3 libstdc++ sqlite-dev
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
@@ -51,6 +39,10 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server ./server
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
+
+# Rebuild native modules for the runtime environment
+ENV npm_config_build_from_source=true
+RUN npm rebuild
 
 # Create uploads directory
 RUN mkdir -p /app/server/uploads && chown -R nextjs:nodejs /app/server/uploads
