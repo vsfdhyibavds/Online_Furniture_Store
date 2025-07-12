@@ -11,4 +11,4 @@ data:
   FRONTEND_URL: "https://your-domain.com"
   MAX_FILE_SIZE: "5242880"
   BCRYPT_ROUNDS: "12"
-  ALLOWED_ORIGINS: "https://your-domain.com"
+  ALLOWED_ORIGINS: "https://your-domain.com,https://www.your-domain.com,https://glistening-alpaca-7a239f.netlify.app"

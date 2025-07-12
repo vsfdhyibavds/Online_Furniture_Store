@@ -15,6 +15,7 @@ services:
       - JWT_SECRET=dev-secret-key
       - FRONTEND_URL=http://localhost:5173
       - VITE_API_URL=http://localhost:3001/api
+      - ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:3001,http://127.0.0.1:3001
     volumes:
       - .:/app
       - furniture_dev_uploads:/app/server/uploads

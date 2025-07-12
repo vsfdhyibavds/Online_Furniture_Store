@@ -20,7 +20,7 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - MAX_FILE_SIZE=5242880
       - BCRYPT_ROUNDS=12
-      - ALLOWED_ORIGINS=http://localhost:3001,https://your-domain.com
+      - ALLOWED_ORIGINS=http://localhost:3001,https://your-domain.com,https://www.your-domain.com,https://glistening-alpaca-7a239f.netlify.app
     volumes:
       - furniture_uploads:/app/server/uploads
       - furniture_db:/app/server/database

@@ -16,10 +16,13 @@ COPY server/package*.json ./server/
 ENV npm_config_build_from_source=true
 
 # Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Rebuild native modules for Alpine Linux
 RUN npm rebuild
+
+# Remove development dependencies after building native modules
+RUN npm prune --production
 
 # Build the application
 FROM base AS builder

@@ -52,13 +52,10 @@ app.use(helmet({
 // CORS configuration
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-      'https://glistening-alpaca-7a239f.netlify.app',
-    ];
+    // Parse allowed origins from environment variable or use defaults
+    const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000,https://glistening-alpaca-7a239f.netlify.app';
+    const allowedOrigins = allowedOriginsEnv.split(',').map(origin => origin.trim());
+    
     // allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
