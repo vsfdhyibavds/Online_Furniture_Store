@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { getDatabase } from '../database/init.js';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+import { JWT_SECRET } from '../config/env.js';
 
 export function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
