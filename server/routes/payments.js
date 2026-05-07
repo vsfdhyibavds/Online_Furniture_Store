@@ -23,7 +23,7 @@ router.post('/process', authenticateToken, [
       });
     }
 
-    const { amount, currency, paymentMethod, orderId } = req.body;
+    const { amount, currency, orderId } = req.body;
 
     // Mock payment processing
     // In production, you would:

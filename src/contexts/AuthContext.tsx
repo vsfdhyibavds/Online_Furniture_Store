@@ -72,51 +72,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateProfile = async (updates: Partial<User>) => {
-    try {
-      const response = await apiClient.updateProfile(updates);
-      
-      if (response.success) {
-        updateUser(response.data);
-      } else {
-        throw new Error('Profile update failed');
-      }
-    } catch (error) {
-      throw error;
+    const response = await apiClient.updateProfile(updates);
+    
+    if (response.success) {
+      updateUser(response.data);
+    } else {
+      throw new Error('Profile update failed');
     }
   };
 
   const changePassword = async (currentPassword: string, newPassword: string) => {
-    try {
-      const response = await apiClient.changePassword(currentPassword, newPassword);
-      
-      if (!response.success) {
-        throw new Error('Password change failed');
-      }
-    } catch (error) {
-      throw error;
+    const response = await apiClient.changePassword(currentPassword, newPassword);
+    
+    if (!response.success) {
+      throw new Error('Password change failed');
     }
   };
 
   useEffect(() => {
-    // Check if user is still authenticated on app load
+    let isMounted = true;
+
     const checkAuth = async () => {
-      if (isAuthenticated && user) {
+      const authState = useAuthStore.getState();
+
+      if (authState.isAuthenticated && authState.user) {
         try {
           const response = await apiClient.getCurrentUser();
+          if (!isMounted) return;
+
           if (response.success) {
-            updateUser(response.data);
+            authState.updateUser(response.data);
           } else {
-            logout();
+            apiClient.logout();
+            authState.logout();
           }
         } catch (error) {
+          if (!isMounted) return;
+
           console.error('Auth check failed:', error);
-          logout();
+          apiClient.logout();
+          authState.logout();
         }
       }
-      setLoading(false);
+
+      if (isMounted) {
+        useAuthStore.getState().setLoading(false);
+      }
     };
 
     checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

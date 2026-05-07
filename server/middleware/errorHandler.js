@@ -1,6 +1,6 @@
 import { logger } from '../utils/logger.js';
 
-export function errorHandler(err, req, res, next) {
+export function errorHandler(err, req, res, _next) {
   logger.error('Error:', err);
 
   // Default error
