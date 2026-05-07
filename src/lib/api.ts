@@ -1,3 +1,5 @@
+import { Category, Product, User } from '../types';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 class ApiClient {
@@ -53,7 +55,7 @@ class ApiClient {
   async login(email: string, password: string) {
     const response = await this.request<{
       success: boolean;
-      data: { user: any; token: string };
+      data: { user: User; token: string };
     }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -74,7 +76,7 @@ class ApiClient {
   }) {
     const response = await this.request<{
       success: boolean;
-      data: { user: any; token: string };
+      data: { user: User; token: string };
     }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
@@ -90,14 +92,14 @@ class ApiClient {
   async getCurrentUser() {
     return this.request<{
       success: boolean;
-      data: any;
+      data: User;
     }>('/auth/me');
   }
 
   async updateProfile(updates: Record<string, unknown>) {
     return this.request<{
       success: boolean;
-      data: unknown;
+      data: User;
     }>('/auth/profile', {
       method: 'PUT',
       body: JSON.stringify(updates),
@@ -126,7 +128,7 @@ class ApiClient {
 
     return this.request<{
       success: boolean;
-      data: unknown[];
+      data: Product[];
       pagination: unknown;
     }>(`/products?${searchParams}`);
   }
@@ -134,14 +136,14 @@ class ApiClient {
   async getProduct(id: string) {
     return this.request<{
       success: boolean;
-      data: unknown;
+      data: Product;
     }>(`/products/${id}`);
   }
 
   async getCategories() {
     return this.request<{
       success: boolean;
-      data: unknown[];
+      data: Category[];
     }>('/products/categories/all');
   }
 
@@ -153,7 +155,7 @@ class ApiClient {
     return this.getProducts({ category: categorySlug, limit });
   }
 
-  async searchProducts(query: string, filters: any = {}) {
+  async searchProducts(query: string, filters: Record<string, unknown> = {}) {
     return this.getProducts({ search: query, ...filters });
   }
 

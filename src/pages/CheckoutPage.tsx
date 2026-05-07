@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, Truck, MapPin, Lock } from 'lucide-react';
+import { CreditCard, Truck, Lock } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { useCartStore } from '../stores/useCartStore';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { formatPrice } from '../lib/utils';
 import { useToast } from '../hooks/use-toast';
 
@@ -60,7 +60,7 @@ export function CheckoutPage() {
         description: "Thank you for your purchase. You will receive a confirmation email shortly.",
       });
       navigate('/orders');
-    } catch (error) {
+    } catch {
       toast({
         title: "Payment failed",
         description: "There was an error processing your payment. Please try again.",

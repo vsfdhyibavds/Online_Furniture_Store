@@ -4,7 +4,7 @@ import { ShoppingCart, User, Search, Menu, Heart, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useCartStore } from '../../stores/useCartStore';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { Badge } from '../ui/badge';
 
 export function Header() {

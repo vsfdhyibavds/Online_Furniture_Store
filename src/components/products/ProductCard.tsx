@@ -8,7 +8,7 @@ import { Product } from '../../types';
 import { formatPrice } from '../../lib/utils';
 import { useCartStore } from '../../stores/useCartStore';
 import { useToast } from '../../hooks/use-toast';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../lib/api';
 
@@ -33,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
         description: `${product.name} has been added to your wishlist.`,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
         description: error.message || "Failed to add to wishlist.",
@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
         description: `${product.name} has been removed from your wishlist.`,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
         description: error.message || "Failed to remove from wishlist.",

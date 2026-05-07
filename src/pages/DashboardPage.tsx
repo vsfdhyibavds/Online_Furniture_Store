@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
-import { User, Package, Heart, Settings, MapPin, CreditCard, Edit } from 'lucide-react';
+import { User, Package, Heart, Settings, MapPin, Edit } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../lib/api';
 import { formatPrice, formatDate } from '../lib/utils';
 import { useToast } from '../hooks/use-toast';
+import { Address, OrderStatus } from '../types';
+
+interface DashboardOrderItem {
+  id: string;
+  productImage: string;
+  productName: string;
+  quantity: number;
+}
+
+interface DashboardOrder {
+  id: string;
+  createdAt: string;
+  items: DashboardOrderItem[];
+  total: number;
+  status: OrderStatus;
+}
+
+interface DashboardWishlistItem {
+  id: string;
+  productImage: string;
+  productName: string;
+  productPrice: number;
+}
 
 export function DashboardPage() {
   const { user, updateProfile, changePassword } = useAuth();
@@ -40,9 +63,9 @@ export function DashboardPage() {
     queryFn: () => apiClient.getAddresses(),
   });
 
-  const userOrders = ordersData?.data || [];
-  const wishlistItems = wishlistData?.data || [];
-  const addresses = addressesData?.data || [];
+  const userOrders = (ordersData?.data || []) as DashboardOrder[];
+  const wishlistItems = (wishlistData?.data || []) as DashboardWishlistItem[];
+  const addresses = (addressesData?.data || []) as Address[];
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +76,7 @@ export function DashboardPage() {
         title: "Profile updated",
         description: "Your profile has been updated successfully.",
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update profile.",
@@ -85,7 +108,7 @@ export function DashboardPage() {
         title: "Password changed",
         description: "Your password has been changed successfully.",
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to change password.",
@@ -190,7 +213,7 @@ export function DashboardPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {userOrders.slice(0, 5).map((order: any) => (
+                      {userOrders.slice(0, 5).map((order) => (
                         <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
                           <div>
                             <h4 className="font-medium">Order #{order.id}</h4>
@@ -226,7 +249,7 @@ export function DashboardPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {userOrders.map((order: any) => (
+                    {userOrders.map((order) => (
                       <div key={order.id} className="border rounded-lg p-4">
                         <div className="flex items-center justify-between mb-4">
                           <div>
@@ -241,7 +264,7 @@ export function DashboardPage() {
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {order.items.slice(0, 3).map((item: any) => (
+                          {order.items.slice(0, 3).map((item) => (
                             <div key={item.id} className="flex items-center space-x-3">
                               <img
                                 src={item.productImage}
@@ -278,7 +301,7 @@ export function DashboardPage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {wishlistItems.map((item: any) => (
+                    {wishlistItems.map((item) => (
                       <div key={item.id} className="border rounded-lg p-4">
                         <img
                           src={item.productImage}
@@ -310,7 +333,7 @@ export function DashboardPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {addresses.map((address: any) => (
+                    {addresses.map((address) => (
                       <div key={address.id} className="border rounded-lg p-4">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-medium">

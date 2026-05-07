@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
@@ -106,7 +106,7 @@ export function SearchPage() {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">
               {searchQuery ? `Search results for "${searchQuery}"` : 
-               filters.category ? `${categories.find((c: any) => c.slug === filters.category)?.name || 'Category'} Furniture` :
+               filters.category ? `${categories.find((c) => c.slug === filters.category)?.name || 'Category'} Furniture` :
                'All Products'}
             </h1>
             <p className="text-gray-600">
@@ -139,7 +139,7 @@ export function SearchPage() {
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
                       <option value="">All Categories</option>
-                      {categories.map((category: any) => (
+                      {categories.map((category) => (
                         <option key={category.id} value={category.slug}>
                           {category.name}
                         </option>
@@ -223,7 +223,7 @@ export function SearchPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product: any) => (
+              {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

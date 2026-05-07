@@ -8,6 +8,16 @@ import { apiClient } from '../lib/api';
 import { useCartStore } from '../stores/useCartStore';
 import { useToast } from '../hooks/use-toast';
 import { formatPrice } from '../lib/utils';
+import { Product } from '../types';
+
+interface WishlistProductSummary {
+  id: string;
+  productId: string;
+  productName: string;
+  productPrice: number;
+  productOriginalPrice?: number;
+  productImage: string;
+}
 
 export function WishlistPage() {
   const { addItem } = useCartStore();
@@ -37,18 +47,29 @@ export function WishlistPage() {
     },
   });
 
-  const handleAddToCart = (item: any) => {
-    // Create a product object from wishlist item
-    const product = {
+  const handleAddToCart = (item: WishlistProductSummary) => {
+    const product: Product = {
       id: item.productId,
       name: item.productName,
+      description: '',
       price: item.productPrice,
       originalPrice: item.productOriginalPrice,
       images: [item.productImage],
+      category: { id: '', name: '', slug: '' },
+      brand: '',
       inStock: true,
+      stockQuantity: 0,
+      rating: 0,
+      reviewCount: 0,
+      materials: [],
+      colors: [],
+      tags: [],
+      featured: false,
+      createdAt: '',
+      updatedAt: '',
     };
 
-    addItem(product as any);
+    addItem(product);
     toast({
       title: "Added to cart",
       description: `${item.productName} has been added to your cart.`,
@@ -71,7 +92,7 @@ export function WishlistPage() {
     );
   }
 
-  const wishlistItems = wishlistData?.data || [];
+  const wishlistItems = (wishlistData?.data || []) as WishlistProductSummary[];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -101,7 +122,7 @@ export function WishlistPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wishlistItems.map((item: any) => (
+          {wishlistItems.map((item) => (
             <Card key={item.id} className="group">
               <CardContent className="p-4">
                 <div className="relative">
