@@ -31,7 +31,7 @@ export function DealsPage() {
   }
 
   const products = productsData?.data || [];
-  const dealsProducts = products.filter((product) => product.originalPrice);
+  const dealsProducts = products.filter((product: any) => product.originalPrice);
 
   return (
     <div>
@@ -75,14 +75,14 @@ export function DealsPage() {
                 {dealsProducts.length} Special {dealsProducts.length === 1 ? 'Deal' : 'Deals'} Available
               </h3>
               <p className="text-gray-600">
-                Save up to {Math.max(...dealsProducts.map((p) =>
+                Save up to {Math.max(...dealsProducts.map((p: any) =>
                   Math.round(((p.originalPrice! - p.price) / p.originalPrice!) * 100)
                 ))}% on selected items
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {dealsProducts.map((product) => (
+              {dealsProducts.map((product: any) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

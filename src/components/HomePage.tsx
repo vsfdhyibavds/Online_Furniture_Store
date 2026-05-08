@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Headphones, RefreshCw } from 'lucide-react';
 import { Button } from '../components/ui/button';
+// Removed unused imports: Star, Card, CardContent, Badge
 import { ProductCard } from '../components/products/ProductCard';
 import { CategoryCard } from '../components/categories/CategoryCard';
 import { useQuery } from '@tanstack/react-query';
@@ -148,7 +149,7 @@ export function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.slice(0, 6).map((category) => (
+            {categories.slice(0, 6).map((category: any) => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
@@ -181,7 +182,7 @@ export function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product) => (
+            {featuredProducts.map((product: any) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
