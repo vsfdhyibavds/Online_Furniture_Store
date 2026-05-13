@@ -163,18 +163,21 @@ export function HomePage() {
       subtitle: "Discover premium furniture that combines style, comfort, and quality",
       image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200",
       cta: "Shop Living Room",
+      link: "/categories",
     },
     {
       title: "Create Your Dream Bedroom",
       subtitle: "Luxurious beds and bedroom furniture for the perfect night's sleep",
       image: "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1200",
       cta: "Shop Bedroom",
+      link: "/categories",
     },
     {
       title: "Elegant Dining Solutions",
       subtitle: "Beautiful dining sets that bring family and friends together",
       image: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1200",
       cta: "Shop Dining Room",
+      link: "/categories",
     },
   ];
 
