@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, MessageSquare, Headphones, AlertCircle, CheckCircle2, Zap, MessageCircle, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, MessageSquare, Headphones, AlertCircle, CheckCircle2, Zap, MessageCircle, Users, Camera, Building } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -175,10 +175,10 @@ export function ContactPage() {
   ];
 
   const socialLinks = [
-    { icon: Facebook, label: 'Facebook', url: '#' },
-    { icon: Instagram, label: 'Instagram', url: '#' },
-    { icon: Twitter, label: 'Twitter', url: '#' },
-    { icon: Linkedin, label: 'LinkedIn', url: '#' },
+    { icon: Users, label: 'Facebook', url: '#' },
+    { icon: Camera, label: 'Instagram', url: '#' },
+    { icon: MessageCircle, label: 'Twitter', url: '#' },
+    { icon: Building, label: 'LinkedIn', url: '#' },
   ];
 
   return (

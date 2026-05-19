@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import type { FormEvent, ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Headphones, Mail, MapPin, Phone, RefreshCw, Shield, Truck } from 'lucide-react';
 import { categories, products } from '../data/mockData';
 import { CategoryCard } from './categories/CategoryCard';
 import { ProductCard } from './products/ProductCard';
 
 export function HomePage() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [email, setEmail] = useState('');
 
@@ -200,8 +202,8 @@ export function HomePage() {
               </div>
             </div>
 
-            <FooterColumn title="Quick Links" links={['Home', 'Categories', 'Deals', 'About Us', 'Contact']} />
-            <FooterColumn title="Customer Service" links={['Help Center', 'Shipping Info', 'Returns', 'Warranty', 'Track Order']} />
+            <FooterColumn title="Quick Links" links={['Home', 'Categories', 'Deals', 'About Us', 'Contact']} navigate={navigate} />
+            <FooterColumn title="Customer Service" links={['Help Center', 'Shipping Info', 'Returns', 'Warranty', 'Track Order']} navigate={navigate} />
 
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Contact Us</h3>
@@ -225,9 +227,9 @@ export function HomePage() {
           <div className="mt-8 flex flex-col items-center justify-between border-t border-gray-800 pt-8 md:flex-row">
             <p className="text-sm text-gray-400">© 2025 FurnStore. All rights reserved.</p>
             <div className="mt-4 flex space-x-6 md:mt-0">
-              <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">Privacy Policy</a>
-              <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">Terms of Service</a>
-              <a href="#" className="text-sm text-gray-400 transition-colors hover:text-white">Cookie Policy</a>
+              <button onClick={() => navigate('/privacy')} className="text-sm text-gray-400 transition-colors hover:text-white">Privacy Policy</button>
+              <button onClick={() => navigate('/terms')} className="text-sm text-gray-400 transition-colors hover:text-white">Terms of Service</button>
+              <button onClick={() => navigate('/cookies')} className="text-sm text-gray-400 transition-colors hover:text-white">Cookie Policy</button>
             </div>
           </div>
         </div>
@@ -248,16 +250,32 @@ function Feature({ icon, title, text }: { icon: ReactElement; title: string; tex
   );
 }
 
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
+function FooterColumn({ title, links, navigate }: { title: string; links: string[]; navigate: any }) {
+  const linkRoutes: { [key: string]: string } = {
+    'Home': '/',
+    'Categories': '/categories',
+    'Deals': '/deals',
+    'About Us': '/about',
+    'Contact': '/contact',
+    'Help Center': '/help',
+    'Shipping Info': '/shipping',
+    'Returns': '/returns',
+    'Warranty': '/warranty',
+    'Track Order': '/track-order',
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">{title}</h3>
       <ul className="space-y-2 text-sm">
         {links.map(link => (
           <li key={link}>
-            <a href="#" className="text-gray-400 transition-colors hover:text-white">
+            <button
+              onClick={() => navigate(linkRoutes[link] || '/')}
+              className="text-gray-400 transition-colors hover:text-white"
+            >
               {link}
-            </a>
+            </button>
           </li>
         ))}
       </ul>
