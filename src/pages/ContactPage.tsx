@@ -186,7 +186,7 @@ export function ContactPage() {
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <img
-          src="/assets/hero.png"
+          src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800"
           alt="Contact us"
           className="w-full h-full object-cover"
         />
