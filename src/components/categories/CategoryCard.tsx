@@ -1,4 +1,4 @@
-import { Category } from '../../types';
+import type { Category } from '../../types';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 

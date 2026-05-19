@@ -1,5 +1,10 @@
-import React from 'react';
-import { NavLinkProps } from '../types';
+import type { ReactNode } from 'react';
+
+type NavLinkProps = {
+  icon: ReactNode;
+  text: string;
+  active?: boolean;
+};
 
 export function NavLink({ icon, text, active = false }: NavLinkProps) {
   return (
