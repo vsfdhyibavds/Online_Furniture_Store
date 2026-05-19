@@ -11,20 +11,20 @@ export function HomePage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Carousel */}
       <div className="relative h-96 bg-gradient-to-r from-blue-600 to-blue-800 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1200')`,
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0">
+          <img
+            src="/hero-banner.jpg"
+            alt="Hero"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }} />
         </div>
         <div className="relative h-full flex flex-col items-center justify-center text-center text-white px-4">
-          <h1 className="text-5xl font-bold mb-4">Premium Furniture</h1>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl">
+          <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Premium Furniture</h1>
+          <p className="text-xl text-white mb-8 max-w-2xl drop-shadow-md">
             Discover beautifully crafted furniture for every room in your home
           </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2">
+          <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
             Shop Now
             <ChevronRight size={20} />
           </button>

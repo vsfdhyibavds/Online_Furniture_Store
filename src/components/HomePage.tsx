@@ -18,7 +18,7 @@ export function HomePage() {
     {
       title: 'Transform Your Living Space',
       subtitle: 'Discover premium furniture that combines style, comfort, and quality',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      image: '/hero-banner.jpg',
       cta: 'Shop Living Room',
       link: '#products',
     },
@@ -56,15 +56,15 @@ export function HomePage() {
             alt="Hero"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-black bg-opacity-40" />
+          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }} />
         </div>
         <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl text-white">
-            <h1 className="mb-4 text-5xl font-bold">{heroSlides[currentSlide].title}</h1>
-            <p className="mb-8 text-xl text-gray-200">{heroSlides[currentSlide].subtitle}</p>
+          <div className="max-w-2xl">
+            <h1 className="mb-4 text-5xl font-bold text-white drop-shadow-lg">{heroSlides[currentSlide].title}</h1>
+            <p className="mb-8 text-xl text-white drop-shadow-md">{heroSlides[currentSlide].subtitle}</p>
             <a
               href={heroSlides[currentSlide].link}
-              className="inline-flex items-center rounded-md bg-white px-6 py-3 text-sm font-medium text-black hover:bg-gray-100"
+              className="inline-flex items-center rounded-lg bg-white px-8 py-4 text-base font-semibold text-black hover:bg-gray-100 shadow-lg transition-all hover:shadow-xl"
             >
               {heroSlides[currentSlide].cta}
               <ArrowRight className="ml-2 h-5 w-5" />

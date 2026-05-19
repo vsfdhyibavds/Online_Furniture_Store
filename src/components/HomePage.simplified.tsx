@@ -161,7 +161,7 @@ export function HomePage() {
     {
       title: "Transform Your Living Space",
       subtitle: "Discover premium furniture that combines style, comfort, and quality",
-      image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      image: "/hero-banner.jpg",
       cta: "Shop Living Room",
       link: "/categories",
     },
@@ -200,11 +200,12 @@ export function HomePage() {
           alt={currentHeroSlide.title}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }} />
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white">
-            <h2 className="text-5xl font-bold mb-4">{currentHeroSlide.title}</h2>
-            <p className="text-xl mb-8">{currentHeroSlide.subtitle}</p>
-            <button className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-semibold transition-colors">
+            <h2 className="text-5xl font-bold mb-4 drop-shadow-lg">{currentHeroSlide.title}</h2>
+            <p className="text-xl mb-8 drop-shadow-md">{currentHeroSlide.subtitle}</p>
+            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold transition-colors hover:bg-gray-100 shadow-lg hover:shadow-xl">
               {currentHeroSlide.cta}
             </button>
           </div>
