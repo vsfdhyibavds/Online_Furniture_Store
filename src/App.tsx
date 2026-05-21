@@ -20,6 +20,9 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy'
 import { TermsOfService } from './pages/TermsOfService'
 import { CookiePolicy } from './pages/CookiePolicy'
 import { ReturnsSupportPage } from './pages/ReturnsSupportPage'
+import { ShippingInfoPage } from './pages/ShippingInfoPage'
+import { WarrantyPage } from './pages/WarrantyPage'
+import { TrackOrderPage } from './pages/TrackOrderPage'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import './App.css'
 
@@ -52,9 +55,9 @@ function App() {
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/cookies" element={<CookiePolicy />} />
             <Route path="/returns" element={<ReturnsSupportPage />} />
-            <Route path="/shipping" element={<HelpCenterPage />} />
-            <Route path="/warranty" element={<ReturnsSupportPage />} />
-            <Route path="/track-order" element={<OrderHistoryPage />} />
+            <Route path="/shipping" element={<ShippingInfoPage />} />
+            <Route path="/warranty" element={<WarrantyPage />} />
+            <Route path="/track-order" element={<TrackOrderPage />} />
           </Routes>
         </main>
       </div>
