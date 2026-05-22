@@ -11,6 +11,7 @@ const quickLinks = [
 
 const customerServiceLinks = [
   { label: 'Help Center', to: '/help' },
+  { label: 'FAQ', to: '/faq' },
   { label: 'Shipping Info', to: '/shipping' },
   { label: 'Returns', to: '/returns' },
   { label: 'Warranty', to: '/warranty' },

@@ -24,6 +24,7 @@ import { ReturnsSupportPage } from './pages/ReturnsSupportPage'
 import { ShippingInfoPage } from './pages/ShippingInfoPage'
 import { WarrantyPage } from './pages/WarrantyPage'
 import { TrackOrderPage } from './pages/TrackOrderPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import './App.css'
 
@@ -63,6 +64,7 @@ function App() {
               <Route path="/shipping" element={<ShippingInfoPage />} />
               <Route path="/warranty" element={<WarrantyPage />} />
               <Route path="/track-order" element={<TrackOrderPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
         </div>
