@@ -1,5 +1,6 @@
-import { Heart, Search, ShoppingCart, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Heart, Search, ShoppingCart, User, LogOut } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 type NavigationProps = {
   cartCount: number;
@@ -7,17 +8,18 @@ type NavigationProps = {
 
 export function Navigation({ cartCount }: NavigationProps) {
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <a href="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
               <span className="text-sm font-bold text-white">F</span>
             </div>
             <span className="text-xl font-bold">FurnStore</span>
-          </a>
+          </Link>
 
           <div className="mx-8 hidden max-w-md flex-1 md:flex">
             <form className="relative w-full" onSubmit={(e) => {
@@ -36,9 +38,9 @@ export function Navigation({ cartCount }: NavigationProps) {
 
           <nav className="flex items-center space-x-4">
             <div className="hidden items-center space-x-4 md:flex">
-              <a href="/" className="text-sm font-medium hover:text-blue-600">Home</a>
-              <a href="/categories" className="text-sm font-medium hover:text-blue-600">Categories</a>
-              <a href="/deals" className="text-sm font-medium hover:text-blue-600">Deals</a>
+              <Link to="/" className="text-sm font-medium hover:text-blue-600">Home</Link>
+              <Link to="/categories" className="text-sm font-medium hover:text-blue-600">Categories</Link>
+              <Link to="/deals" className="text-sm font-medium hover:text-blue-600">Deals</Link>
             </div>
             <button
               onClick={() => navigate('/wishlist')}
@@ -59,13 +61,32 @@ export function Navigation({ cartCount }: NavigationProps) {
                 </span>
               )}
             </button>
-            <button
-              onClick={() => navigate('/auth')}
-              className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100"
-            >
-              <User className="mr-2 h-4 w-4" />
-              Sign In
-            </button>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  {user?.firstName || 'Account'}
+                </button>
+                <button
+                  onClick={() => { logout(); navigate('/'); }}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-gray-100"
+                  aria-label="Sign out"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate('/auth')}
+                className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100"
+              >
+                <User className="mr-2 h-4 w-4" />
+                Sign In
+              </button>
+            )}
           </nav>
         </div>
       </div>

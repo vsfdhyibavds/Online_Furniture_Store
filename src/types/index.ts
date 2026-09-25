@@ -53,3 +53,19 @@ export interface OrderItem {
   quantity: number;
   price: number;
 }
+
+export interface CartItem {
+  id: string;
+  productId: string;
+  product: Product;
+  quantity: number;
+  selectedColor?: string;
+  addedAt: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+}

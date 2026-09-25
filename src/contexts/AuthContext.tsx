@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect } from 'react';
-import { useAuthStore } from '../stores/useAuthStore';
-import { apiClient } from '../lib/api';
-import { User } from '../types';
+import { createContext, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { supabase } from '../lib/supabase';
+import type { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
@@ -23,115 +23,102 @@ interface RegisterData {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { 
-    user, 
-    isAuthenticated, 
-    isLoading, 
-    login: storeLogin, 
-    logout: storeLogout, 
-    updateUser,
-    setLoading 
-  } = useAuthStore();
-
-  const login = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      const response = await apiClient.login(email, password);
-      
-      if (response.success) {
-        storeLogin(response.data.user, response.data.token);
-      } else {
-        throw new Error('Login failed');
-      }
-    } catch (error) {
-      setLoading(false);
-      throw error;
-    }
+function mapUser(user: any): User {
+  return {
+    id: user.id,
+    email: user.email || '',
+    firstName: user.user_metadata?.first_name,
+    lastName: user.user_metadata?.last_name,
   };
+}
 
-  const register = async (userData: RegisterData) => {
-    setLoading(true);
-    try {
-      const response = await apiClient.register(userData);
-      
-      if (response.success) {
-        storeLogin(response.data.user, response.data.token);
-      } else {
-        throw new Error('Registration failed');
-      }
-    } catch (error) {
-      setLoading(false);
-      throw error;
-    }
-  };
-
-  const logout = () => {
-    apiClient.logout();
-    storeLogout();
-  };
-
-  const updateProfile = async (updates: Partial<User>) => {
-    const response = await apiClient.updateProfile(updates);
-    
-    if (response.success) {
-      updateUser(response.data);
-    } else {
-      throw new Error('Profile update failed');
-    }
-  };
-
-  const changePassword = async (currentPassword: string, newPassword: string) => {
-    const response = await apiClient.changePassword(currentPassword, newPassword);
-    
-    if (!response.success) {
-      throw new Error('Password change failed');
-    }
-  };
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
-    const checkAuth = async () => {
-      const authState = useAuthStore.getState();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!isMounted) return;
+      if (session?.user) {
+        setUser(mapUser(session.user));
+      }
+      setIsLoading(false);
+    });
 
-      if (authState.isAuthenticated && authState.user) {
-        try {
-          const response = await apiClient.getCurrentUser();
-          if (!isMounted) return;
-
-          if (response.success) {
-            authState.updateUser(response.data);
-          } else {
-            apiClient.logout();
-            authState.logout();
-          }
-        } catch (error) {
-          if (!isMounted) return;
-
-          console.error('Auth check failed:', error);
-          apiClient.logout();
-          authState.logout();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      (async () => {
+        if (session?.user) {
+          setUser(mapUser(session.user));
+        } else {
+          setUser(null);
         }
-      }
-
-      if (isMounted) {
-        useAuthStore.getState().setLoading(false);
-      }
-    };
-
-    checkAuth();
+      })();
+    });
 
     return () => {
       isMounted = false;
+      subscription.unsubscribe();
     };
   }, []);
+
+  const login = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    if (data.user) setUser(mapUser(data.user));
+  };
+
+  const register = async (userData: RegisterData) => {
+    const { data, error } = await supabase.auth.signUp({
+      email: userData.email,
+      password: userData.password,
+      options: {
+        data: {
+          first_name: userData.firstName,
+          last_name: userData.lastName,
+        },
+      },
+    });
+    if (error) throw error;
+    if (data.user) setUser(mapUser(data.user));
+  };
+
+  const logout = () => {
+    supabase.auth.signOut();
+    setUser(null);
+  };
+
+  const updateProfile = async (updates: Partial<User>) => {
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        first_name: updates.firstName,
+        last_name: updates.lastName,
+      },
+    });
+    if (error) throw error;
+
+    if (user) {
+      setUser({ ...user, ...updates });
+    }
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user?.email || '',
+      password: currentPassword,
+    });
+    if (signInError) throw new Error('Current password is incorrect');
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated,
+        isAuthenticated: !!user,
         isLoading,
         login,
         register,

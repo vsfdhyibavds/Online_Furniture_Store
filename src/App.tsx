@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './contexts/AuthContext'
+import { useCartStore } from './stores/useCartStore'
 import { Navigation } from './components/Navigation'
 import { HomePage } from './components/HomePage'
 import { CategoriesPage } from './pages/CategoriesPage'
@@ -26,49 +27,58 @@ import { WarrantyPage } from './pages/WarrantyPage'
 import { TrackOrderPage } from './pages/TrackOrderPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
+import { Toaster } from './components/ui/toaster'
 import './App.css'
 
-// Create a client for React Query
 const queryClient = new QueryClient()
 
-function App() {
-  const [cartCount] = useState(0)
+function AppContent() {
+  const cartCount = useCartStore(s => s.getTotalItems())
 
   return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-white">
+        <Navigation cartCount={cartCount} />
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/deals" element={<DealsPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/orders" element={<OrderHistoryPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/help" element={<HelpCenterPage />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/returns" element={<ReturnsSupportPage />} />
+            <Route path="/shipping" element={<ShippingInfoPage />} />
+            <Route path="/warranty" element={<WarrantyPage />} />
+            <Route path="/track-order" element={<TrackOrderPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  )
+}
+
+function App() {
+  return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="min-h-screen bg-white">
-          <Navigation cartCount={cartCount} />
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/deals" element={<DealsPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/product/:id" element={<ProductPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/orders" element={<OrderHistoryPage />} />
-              <Route path="/wishlist" element={<WishlistPage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/admin/*" element={<AdminDashboard />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/faq" element={<FAQPage />} />
-              <Route path="/help" element={<HelpCenterPage />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/cookies" element={<CookiePolicy />} />
-              <Route path="/returns" element={<ReturnsSupportPage />} />
-              <Route path="/shipping" element={<ShippingInfoPage />} />
-              <Route path="/warranty" element={<WarrantyPage />} />
-              <Route path="/track-order" element={<TrackOrderPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-        </div>
-      </BrowserRouter>
+      <AuthProvider>
+        <AppContent />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   )
 }
