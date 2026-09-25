@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Package, Eye, Download, RefreshCw, Truck, CheckCircle2, Clock, AlertCircle, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../contexts/AuthContext';
-import { mockOrders } from '../data/mockData';
+import { apiClient } from '../lib/api';
 import { formatPrice, formatDate } from '../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 export function OrderHistoryPage() {
-  const { user } = useAuth();
-  const userOrders = mockOrders.filter(order => order.userId === user?.id);
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+
+  const { data: ordersData, isLoading } = useQuery({
+    queryKey: ['orders'],
+    queryFn: () => apiClient.getMyOrders(),
+    enabled: !!user,
+  });
+
+  const userOrders = ordersData?.data || [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -75,13 +85,28 @@ export function OrderHistoryPage() {
       </section>
 
       <div className="container mx-auto px-4 py-12">
-        {userOrders.length === 0 ? (
+        {!isAuthenticated ? (
+          <Card className="shadow-lg border-0">
+            <CardContent className="text-center py-16">
+              <Package className="h-20 w-20 text-gray-300 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Please sign in</h3>
+              <p className="text-gray-600 mb-8 text-lg">Sign in to view your order history.</p>
+              <Button size="lg" onClick={() => navigate('/auth')}>Sign In</Button>
+            </CardContent>
+          </Card>
+        ) : isLoading ? (
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-32 bg-gray-200 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        ) : userOrders.length === 0 ? (
           <Card className="shadow-lg border-0">
             <CardContent className="text-center py-16">
               <Package className="h-20 w-20 text-gray-300 mx-auto mb-6" />
               <h3 className="text-2xl font-bold text-gray-900 mb-2">No orders yet</h3>
               <p className="text-gray-600 mb-8 text-lg">You haven't placed any orders yet. Start shopping to see your orders here!</p>
-              <Button size="lg" onClick={() => window.location.href = '/'}>Start Shopping</Button>
+              <Button size="lg" onClick={() => navigate('/')}>Start Shopping</Button>
             </CardContent>
           </Card>
         ) : (
@@ -163,12 +188,12 @@ export function OrderHistoryPage() {
                           {order.items.map((item) => (
                             <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
                               <img
-                                src={item.product.images[0]}
-                                alt={item.product.name}
+                                src={item.productImage}
+                                alt={item.productName}
                                 className="w-16 h-16 object-cover rounded-md"
                               />
                               <div className="flex-1 min-w-0">
-                                <h5 className="font-medium text-gray-900">{item.product.name}</h5>
+                                <h5 className="font-medium text-gray-900">{item.productName}</h5>
                                 <p className="text-sm text-gray-600 mt-1">
                                   Qty: {item.quantity} × {formatPrice(item.price)}
                                 </p>

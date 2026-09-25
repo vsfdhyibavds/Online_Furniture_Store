@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import type { FormEvent, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Headphones, Mail, MapPin, Phone, RefreshCw, Shield, Truck } from 'lucide-react';
-import { categories, products } from '../data/mockData';
+import { apiClient } from '../lib/api';
 import { CategoryCard } from './categories/CategoryCard';
 import { ProductCard } from './products/ProductCard';
 
@@ -11,8 +12,24 @@ export function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [email, setEmail] = useState('');
 
-  const featuredProducts = products.filter(product => product.featured).slice(0, 6);
-  const bestSellers = [...products].sort((a, b) => b.rating - a.rating).slice(0, 8);
+  const { data: productsData } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: () => apiClient.getProducts({ featured: true, limit: 6 }),
+  });
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => apiClient.getCategories(),
+  });
+
+  const { data: bestSellersData } = useQuery({
+    queryKey: ['products', 'bestsellers'],
+    queryFn: () => apiClient.getProducts({ sortBy: 'rating', sortOrder: 'desc', limit: 8 }),
+  });
+
+  const featuredProducts = productsData?.data || [];
+  const categories = categoriesData?.data || [];
+  const bestSellers = bestSellersData?.data || [];
 
   const heroSlides = [
     {

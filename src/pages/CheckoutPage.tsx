@@ -8,6 +8,7 @@ import { useCartStore } from '../stores/useCartStore';
 import { useAuth } from '../contexts/AuthContext';
 import { formatPrice } from '../lib/utils';
 import { useToast } from '../hooks/use-toast';
+import { apiClient } from '../lib/api';
 
 export function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCartStore();
@@ -15,6 +16,7 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     // Shipping Information
@@ -50,20 +52,44 @@ export function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Clear cart and redirect
+      const last4 = formData.cardNumber.replace(/\s/g, '').slice(-4);
+
+      await apiClient.createOrder({
+        items: items.map(item => ({
+          product: item.product,
+          quantity: item.quantity,
+          selectedColor: item.selectedColor,
+        })),
+        subtotal,
+        tax,
+        shipping,
+        total,
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          street: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode,
+          country: formData.country,
+        },
+        paymentMethod: {
+          brand: formData.cardNumber.startsWith('4') ? 'visa' : 'card',
+          last4,
+        },
+      });
+
       clearCart();
       toast({
         title: "Order placed successfully!",
-        description: "Thank you for your purchase. You will receive a confirmation email shortly.",
+        description: "Thank you for your purchase. Your order has been confirmed.",
       });
       navigate('/orders');
     } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "An error occurred");
       toast({
-        title: "Payment failed",
-        description: "There was an error processing your payment. Please try again.",
+        title: "Order failed",
+        description: error instanceof Error ? error.message : "There was an error placing your order. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -72,18 +98,32 @@ export function CheckoutPage() {
   };
 
   if (items.length === 0) {
-    navigate('/cart');
-    return null;
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
+        <Button onClick={() => navigate('/cart')}>Go to Cart</Button>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
-    navigate('/auth');
-    return null;
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-2xl font-bold mb-4">Please sign in to checkout</h1>
+        <Button onClick={() => navigate('/auth')}>Sign In</Button>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+
+      {errorMessage && (
+        <div className="mb-6 rounded-md bg-red-50 border border-red-200 p-4 text-red-700">
+          {errorMessage}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
