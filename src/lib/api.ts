@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Product, Category } from '../types';
+import type { Product, Category, Address } from '../types';
 
 interface DbProduct {
   id: string;
@@ -451,6 +451,138 @@ class ApiClient {
       .eq('user_id', user.id);
 
     return count || 0;
+  }
+
+  // Addresses
+  async getAddresses() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: true, data: [] as Address[] };
+
+    const { data, error } = await supabase
+      .from('user_addresses')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('is_default', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const addresses = (data || []).map((row: any): Address => ({
+      id: row.id,
+      label: row.label,
+      firstName: row.first_name,
+      lastName: row.last_name,
+      street: row.street,
+      city: row.city,
+      state: row.state,
+      zipCode: row.zip_code,
+      country: row.country,
+      phone: row.phone,
+      isDefault: row.is_default,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    }));
+
+    return { success: true, data: addresses };
+  }
+
+  async addAddress(addr: Omit<Address, 'id' | 'createdAt' | 'updatedAt' | 'isDefault'> & { isDefault?: boolean }) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('You must be logged in');
+
+    if (addr.isDefault) {
+      await supabase
+        .from('user_addresses')
+        .update({ is_default: false })
+        .eq('user_id', user.id);
+    }
+
+    const { data, error } = await supabase
+      .from('user_addresses')
+      .insert({
+        user_id: user.id,
+        label: addr.label,
+        first_name: addr.firstName,
+        last_name: addr.lastName,
+        street: addr.street,
+        city: addr.city,
+        state: addr.state,
+        zip_code: addr.zipCode,
+        country: addr.country,
+        phone: addr.phone || null,
+        is_default: addr.isDefault || false,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      success: true,
+      data: {
+        id: data.id,
+        label: data.label,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zip_code,
+        country: data.country,
+        phone: data.phone,
+        isDefault: data.is_default,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      } as Address,
+    };
+  }
+
+  async updateAddress(id: string, updates: Partial<Omit<Address, 'id' | 'createdAt' | 'updatedAt'>>) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('You must be logged in');
+
+    if (updates.isDefault) {
+      await supabase
+        .from('user_addresses')
+        .update({ is_default: false })
+        .eq('user_id', user.id)
+        .neq('id', id);
+    }
+
+    const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (updates.label !== undefined) dbUpdates.label = updates.label;
+    if (updates.firstName !== undefined) dbUpdates.first_name = updates.firstName;
+    if (updates.lastName !== undefined) dbUpdates.last_name = updates.lastName;
+    if (updates.street !== undefined) dbUpdates.street = updates.street;
+    if (updates.city !== undefined) dbUpdates.city = updates.city;
+    if (updates.state !== undefined) dbUpdates.state = updates.state;
+    if (updates.zipCode !== undefined) dbUpdates.zip_code = updates.zipCode;
+    if (updates.country !== undefined) dbUpdates.country = updates.country;
+    if (updates.phone !== undefined) dbUpdates.phone = updates.phone;
+    if (updates.isDefault !== undefined) dbUpdates.is_default = updates.isDefault;
+
+    const { error } = await supabase
+      .from('user_addresses')
+      .update(dbUpdates)
+      .eq('id', id)
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+    return { success: true };
+  }
+
+  async deleteAddress(id: string) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('You must be logged in');
+
+    const { error } = await supabase
+      .from('user_addresses')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+    return { success: true };
   }
 }
 

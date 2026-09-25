@@ -69,3 +69,19 @@ export interface User {
   firstName?: string;
   lastName?: string;
 }
+
+export interface Address {
+  id: string;
+  label: string;
+  firstName: string;
+  lastName: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phone?: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
