@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { FormEvent, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, Headphones, Mail, MapPin, Phone, RefreshCw, Shield, Truck } from 'lucide-react';
+import { ArrowRight, Headphones, RefreshCw, Shield, Truck } from 'lucide-react';
 import { apiClient } from '../lib/api';
 import { CategoryCard } from './categories/CategoryCard';
 import { ProductCard } from './products/ProductCard';
+import { useToast } from '../hooks/use-toast';
 
 export function HomePage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [email, setEmail] = useState('');
+  const heroRef = useRef<HTMLDivElement>(null);
 
   const { data: productsData } = useQuery({
     queryKey: ['products', 'featured'],
@@ -37,41 +40,53 @@ export function HomePage() {
       subtitle: 'Discover premium furniture that combines style, comfort, and quality',
       image: '/hero-banner.jpg',
       cta: 'Shop Living Room',
-      link: '#products',
+      link: '/categories',
     },
     {
       title: 'Create Your Dream Bedroom',
       subtitle: "Luxurious beds and bedroom furniture for the perfect night's sleep",
       image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1200',
       cta: 'Shop Bedroom',
-      link: '#products',
+      link: '/categories',
     },
     {
       title: 'Elegant Dining Solutions',
       subtitle: 'Beautiful dining sets that bring family and friends together',
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1200',
       cta: 'Shop Dining Room',
-      link: '#products',
+      link: '/categories',
     },
   ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % heroSlides.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [heroSlides.length]);
 
   const handleNewsletterSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (email.trim()) {
-      console.log('Newsletter signup:', email);
       setEmail('');
-      alert('Thank you for subscribing to our newsletter!');
+      toast({
+        title: 'Subscribed!',
+        description: 'Thank you for subscribing to our newsletter.',
+      });
     }
   };
 
   return (
     <div className="min-h-screen">
-      <section className="relative h-[600px] overflow-hidden">
+      <section className="relative h-[600px] overflow-hidden" ref={heroRef}
+        onMouseEnter={() => { if (heroRef.current) heroRef.current.dataset.paused = 'true'; }}
+        onMouseLeave={() => { if (heroRef.current) delete heroRef.current.dataset.paused; }}
+      >
         <div className="absolute inset-0">
           <img
             src={heroSlides[currentSlide].image}
-            alt="Hero"
-            className="h-full w-full object-cover"
+            alt={heroSlides[currentSlide].title}
+            className="h-full w-full object-cover transition-opacity duration-700"
           />
           <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }} />
         </div>
@@ -79,13 +94,13 @@ export function HomePage() {
           <div className="max-w-2xl">
             <h1 className="mb-4 text-5xl font-bold text-white drop-shadow-lg">{heroSlides[currentSlide].title}</h1>
             <p className="mb-8 text-xl text-white drop-shadow-md">{heroSlides[currentSlide].subtitle}</p>
-            <a
-              href={heroSlides[currentSlide].link}
+            <button
+              onClick={() => navigate(heroSlides[currentSlide].link)}
               className="inline-flex items-center rounded-lg bg-white px-8 py-4 text-base font-semibold text-black hover:bg-gray-100 shadow-lg transition-all hover:shadow-xl"
             >
               {heroSlides[currentSlide].cta}
               <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
+            </button>
           </div>
         </div>
         <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 space-x-2">
@@ -127,13 +142,13 @@ export function HomePage() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <a
-              href="#categories"
+            <button
+              onClick={() => navigate('/categories')}
               className="inline-flex items-center rounded-md border border-gray-300 px-5 py-3 text-sm font-medium hover:bg-gray-50"
             >
               View All Categories
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -145,13 +160,13 @@ export function HomePage() {
               <h2 className="mb-4 text-3xl font-bold">Featured Products</h2>
               <p className="text-gray-600">Handpicked favorites that our customers love most</p>
             </div>
-            <a
-              href="#products"
+            <button
+              onClick={() => navigate('/categories')}
               className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-white"
             >
               View All Products
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </button>
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {featuredProducts.map(product => (
@@ -189,6 +204,7 @@ export function HomePage() {
               value={email}
               onChange={event => setEmail(event.target.value)}
               required
+              aria-label="Email address"
             />
             <button type="submit" className="rounded-md bg-white px-6 py-3 font-medium text-blue-600 hover:bg-gray-100">
               Subscribe
@@ -196,61 +212,6 @@ export function HomePage() {
           </form>
         </div>
       </section>
-
-      <footer className="bg-gray-900 py-12 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
-                  <span className="text-sm font-bold text-white">F</span>
-                </div>
-                <span className="text-xl font-bold">FurnStore</span>
-              </div>
-              <p className="text-sm text-gray-400">
-                Premium furniture for modern living. Transform your space with our carefully curated collection.
-              </p>
-              <div className="flex space-x-4">
-                {['f', 'x', 'ig'].map(item => (
-                  <span key={item} className="cursor-pointer text-sm font-semibold text-gray-400 transition-colors hover:text-white">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <FooterColumn title="Quick Links" links={['Home', 'Categories', 'Deals', 'About Us', 'Contact']} navigate={navigate} />
-            <FooterColumn title="Customer Service" links={['Help Center', 'Shipping Info', 'Returns', 'Warranty', 'Track Order']} navigate={navigate} />
-
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Contact Us</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-400">+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-400">support@furnstore.com</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-400">123 Furniture St, Design City, DC 12345</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center justify-between border-t border-gray-800 pt-8 md:flex-row">
-            <p className="text-sm text-gray-400">© 2025 FurnStore. All rights reserved.</p>
-            <div className="mt-4 flex space-x-6 md:mt-0">
-              <button onClick={() => navigate('/privacy')} className="text-sm text-gray-400 transition-colors hover:text-white">Privacy Policy</button>
-              <button onClick={() => navigate('/terms')} className="text-sm text-gray-400 transition-colors hover:text-white">Terms of Service</button>
-              <button onClick={() => navigate('/cookies')} className="text-sm text-gray-400 transition-colors hover:text-white">Cookie Policy</button>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
@@ -263,39 +224,6 @@ function Feature({ icon, title, text }: { icon: ReactElement; title: string; tex
       </div>
       <h3 className="mb-2 text-lg font-semibold">{title}</h3>
       <p className="text-gray-600">{text}</p>
-    </div>
-  );
-}
-
-function FooterColumn({ title, links, navigate }: { title: string; links: string[]; navigate: any }) {
-  const linkRoutes: { [key: string]: string } = {
-    'Home': '/',
-    'Categories': '/categories',
-    'Deals': '/deals',
-    'About Us': '/about',
-    'Contact': '/contact',
-    'Help Center': '/help',
-    'Shipping Info': '/shipping',
-    'Returns': '/returns',
-    'Warranty': '/warranty',
-    'Track Order': '/track-order',
-  };
-
-  return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <ul className="space-y-2 text-sm">
-        {links.map(link => (
-          <li key={link}>
-            <button
-              onClick={() => navigate(linkRoutes[link] || '/')}
-              className="text-gray-400 transition-colors hover:text-white"
-            >
-              {link}
-            </button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

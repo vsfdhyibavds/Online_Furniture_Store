@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Search, Menu, Heart, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -11,9 +11,12 @@ export function Header() {
   const { getTotalItems, toggleCart } = useCartStore();
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const totalItems = getTotalItems();
+
+  const isActive = (path: string) => location.pathname === path;
 
   const handleAuthAction = () => {
     if (isAuthenticated) {
@@ -78,19 +81,21 @@ export function Header() {
               size="icon" 
               className="md:hidden"
               onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-primary' : 'hover:text-primary'}`}>
                 Home
               </Link>
-              <Link to="/categories" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/categories" className={`text-sm font-medium transition-colors ${isActive('/categories') ? 'text-primary' : 'hover:text-primary'}`}>
                 Categories
               </Link>
-              <Link to="/deals" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/deals" className={`text-sm font-medium transition-colors ${isActive('/deals') ? 'text-primary' : 'hover:text-primary'}`}>
                 Deals
               </Link>
             </div>
@@ -98,12 +103,12 @@ export function Header() {
             {/* User Actions */}
             <div className="flex items-center space-x-2">
               {/* Wishlist */}
-              <Button variant="ghost" size="icon" onClick={handleWishlistClick}>
+              <Button variant="ghost" size="icon" onClick={handleWishlistClick} aria-label="Wishlist">
                 <Heart className="h-5 w-5" />
               </Button>
 
               {/* Cart */}
-              <Button variant="ghost" size="icon" onClick={toggleCart} className="relative">
+              <Button variant="ghost" size="icon" onClick={toggleCart} className="relative" aria-label="Cart">
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
                   <Badge 
@@ -160,21 +165,21 @@ export function Header() {
               <div className="flex flex-col space-y-2">
                 <Link 
                   to="/" 
-                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  className={`text-sm font-medium transition-colors py-2 ${isActive('/') ? 'text-primary' : 'hover:text-primary'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link 
                   to="/categories" 
-                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  className={`text-sm font-medium transition-colors py-2 ${isActive('/categories') ? 'text-primary' : 'hover:text-primary'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Categories
                 </Link>
                 <Link 
                   to="/deals" 
-                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  className={`text-sm font-medium transition-colors py-2 ${isActive('/deals') ? 'text-primary' : 'hover:text-primary'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Deals
